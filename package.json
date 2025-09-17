@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "Universal Universal Basic Income cryptocurrency with biometric identity verification",
   "main": "index.js",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
@@ -36,6 +40,9 @@
     "jest": "^29.7.0",
     "nodemon": "^3.0.2",
     "supertest": "^6.3.3"
+  },
+  "optionalDependencies": {
+    "fsevents": "^2.3.2"
   },
   "keywords": [
     "cryptocurrency",
