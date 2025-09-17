@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UUBI - Clean Auth System</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .form-container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-white mb-2">UUBI Cryptocurrency</h1>
+            <p class="text-white opacity-90">Universal Universal Basic Income</p>
+        </div>
+
+        <!-- Message Container -->
+        <div id="messageContainer" class="mb-6"></div>
+
+        <!-- Registration Form -->
+        <div id="registrationForm" class="form-container">
+            <div class="bg-white rounded-lg shadow-lg p-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center">
+                    <i class="fas fa-user-plus mr-2"></i>
+                    Create Account
+                </h2>
+                
+                <form id="registerForm" class="space-y-4">
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                        <input type="email" id="email" name="email" required
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                               placeholder="Enter your email">
+                    </div>
+                    
+                    <div>
+                        <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">Phone Number (Optional)</label>
+                        <input type="tel" id="phone" name="phone"
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                               placeholder="Enter your phone number">
+                    </div>
+                    
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                        <input type="password" id="password" name="password" required
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                               placeholder="Create a password">
+                    </div>
+                    
+                    <div>
+                        <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-2">Confirm Password</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" required
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                               placeholder="Confirm your password">
+                    </div>
+                    
+                    <button type="submit" id="registerBtn" class="w-full bg-green-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-green-700 transition">
+                        <i class="fas fa-user-plus mr-2"></i>
+                        Create Account
+                    </button>
+                </form>
+                
+                <div class="mt-6 text-center">
+                    <p class="text-sm text-gray-600">
+                        Already have an account? 
+                        <button type="button" id="showLoginBtn" class="text-blue-600 hover:text-blue-500 font-medium">
+                            Login here
+                        </button>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Login Form -->
+        <div id="loginForm" class="form-container hidden">
+            <div class="bg-white rounded-lg shadow-lg p-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center">
+                    <i class="fas fa-sign-in-alt mr-2"></i>
+                    Login to Account
+                </h2>
+                
+                <form id="loginFormElement" class="space-y-4">
+                    <div>
+                        <label for="loginEmail" class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                        <input type="email" id="loginEmail" name="email" required
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                               placeholder="Enter your email">
+                    </div>
+                    
+                    <div>
+                        <label for="loginPassword" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                        <input type="password" id="loginPassword" name="password" required
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                               placeholder="Enter your password">
+                    </div>
+                    
+                    <button type="submit" id="loginBtn" class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 transition">
+                        <i class="fas fa-sign-in-alt mr-2"></i>
+                        Login
+                    </button>
+                </form>
+                
+                <div class="mt-6 text-center">
+                    <p class="text-sm text-gray-600">
+                        Don't have an account? 
+                        <button type="button" id="showRegisterBtn" class="text-green-600 hover:text-green-500 font-medium">
+                            Create one here
+                        </button>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Success Message -->
+        <div id="successMessage" class="form-container hidden">
+            <div class="bg-white rounded-lg shadow-lg p-8 text-center">
+                <div class="text-green-600 text-6xl mb-4">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">Welcome to UUBI!</h2>
+                <p class="text-gray-600 mb-6">Your account has been created successfully.</p>
+                <button id="continueBtn" class="bg-purple-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-purple-700 transition">
+                    Continue to Dashboard
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple message display function
+        function showMessage(message, type = 'info') {
+            const container = document.getElementById('messageContainer');
+            if (!container) return;
+            
+            // Clear existing messages
+            container.innerHTML = '';
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `p-4 rounded-lg mb-4 ${
+                type === 'success' ? 'bg-green-100 text-green-800 border border-green-200' :
+                type === 'error' ? 'bg-red-100 text-red-800 border border-red-200' :
+                type === 'warning' ? 'bg-yellow-100 text-yellow-800 border border-yellow-200' :
+                'bg-blue-100 text-blue-800 border border-blue-200'
+            }`;
+            
+            messageDiv.innerHTML = `
+                <div class="flex items-center">
+                    <span class="mr-2">${type === 'success' ? '✅' : type === 'error' ? '❌' : type === 'warning' ? '⚠️' : 'ℹ️'}</span>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            container.appendChild(messageDiv);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                if (messageDiv.parentElement) {
+                    messageDiv.remove();
+                }
+            }, 5000);
+        }
+
+        // Show form function
+        function showForm(formId) {
+            console.log('showForm called with formId:', formId);
+            
+            // Hide all forms
+            const registrationForm = document.getElementById('registrationForm');
+            const loginForm = document.getElementById('loginForm');
+            const successMessage = document.getElementById('successMessage');
+            
+            console.log('Forms found:', {
+                registrationForm: !!registrationForm,
+                loginForm: !!loginForm,
+                successMessage: !!successMessage
+            });
+            
+            if (registrationForm) registrationForm.classList.add('hidden');
+            if (loginForm) loginForm.classList.add('hidden');
+            if (successMessage) successMessage.classList.add('hidden');
+            
+            // Show selected form
+            const targetForm = document.getElementById(formId);
+            console.log('Target form found:', !!targetForm);
+            
+            if (targetForm) {
+                targetForm.classList.remove('hidden');
+                console.log('Form shown:', formId);
+            } else {
+                console.error('Target form not found:', formId);
+            }
+            
+            // Clear messages
+            const messageContainer = document.getElementById('messageContainer');
+            if (messageContainer) {
+                messageContainer.innerHTML = '';
+            }
+        }
+
+        // Registration form handler
+        async function handleRegistration(event) {
+            event.preventDefault();
+            
+            const form = event.target;
+            const formData = new FormData(form);
+            const email = formData.get('email');
+            const phone = formData.get('phone');
+            const password = formData.get('password');
+            const confirmPassword = formData.get('confirmPassword');
+            
+            // Basic validation
+            if (!email) {
+                showMessage('Email is required', 'error');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showMessage('Passwords do not match', 'error');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showMessage('Password must be at least 6 characters', 'error');
+                return;
+            }
+            
+            // Show loading state
+            const submitBtn = document.getElementById('registerBtn');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Creating Account...';
+            submitBtn.disabled = true;
+            
+            try {
+                // Send registration request
+                const response = await fetch('/api/register-email-phone', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        phone: phone || '',
+                        password: password
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showMessage('Account created successfully!', 'success');
+                    showForm('successMessage');
+                } else {
+                    showMessage('Registration failed: ' + result.error, 'error');
+                }
+                
+            } catch (error) {
+                console.error('Registration error:', error);
+                showMessage('Registration failed: ' + error.message, 'error');
+            } finally {
+                // Reset button
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        }
+
+        // Login form handler
+        async function handleLogin(event) {
+            event.preventDefault();
+            
+            const form = event.target;
+            const formData = new FormData(form);
+            const email = formData.get('email');
+            const password = formData.get('password');
+            
+            // Basic validation
+            if (!email || !password) {
+                showMessage('Email and password are required', 'error');
+                return;
+            }
+            
+            // Show loading state
+            const submitBtn = document.getElementById('loginBtn');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Logging in...';
+            submitBtn.disabled = true;
+            
+            try {
+                // Send login request
+                const response = await fetch('/api/login-email-phone', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        password: password
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showMessage('Login successful!', 'success');
+                    showForm('successMessage');
+                } else {
+                    showMessage('Login failed: ' + result.error, 'error');
+                }
+                
+            } catch (error) {
+                console.error('Login error:', error);
+                showMessage('Login failed: ' + error.message, 'error');
+            } finally {
+                // Reset button
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Clean Auth System loaded');
+            
+            // Form event listeners
+            document.getElementById('registerForm').addEventListener('submit', handleRegistration);
+            document.getElementById('loginFormElement').addEventListener('submit', handleLogin);
+            
+            // Button event listeners
+            const showLoginBtn = document.getElementById('showLoginBtn');
+            const showRegisterBtn = document.getElementById('showRegisterBtn');
+            
+            console.log('showLoginBtn found:', !!showLoginBtn);
+            console.log('showRegisterBtn found:', !!showRegisterBtn);
+            
+            if (showLoginBtn) {
+                showLoginBtn.addEventListener('click', function() {
+                    console.log('Login button clicked');
+                    showForm('loginForm');
+                });
+                console.log('Login button listener added');
+            } else {
+                console.error('showLoginBtn not found');
+            }
+            
+            if (showRegisterBtn) {
+                showRegisterBtn.addEventListener('click', function() {
+                    console.log('Register button clicked');
+                    showForm('registrationForm');
+                });
+                console.log('Register button listener added');
+            } else {
+                console.error('showRegisterBtn not found');
+            }
+            
+            document.getElementById('continueBtn').addEventListener('click', function() {
+                showMessage('Redirecting to main application...', 'info');
+                // Redirect to main app
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 2000);
+            });
+            
+            // Show initial form
+            showForm('registrationForm');
+            
+            console.log('✅ Event listeners attached');
+        });
+    </script>
+</body>
+</html>

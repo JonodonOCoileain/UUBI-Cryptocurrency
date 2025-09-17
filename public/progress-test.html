@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UUBI Progress Bar Test</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-white mb-2">Progress Bar Test</h1>
+            <p class="text-white opacity-90">Testing the mining progress bar functionality</p>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-lg p-8 max-w-2xl mx-auto">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">Mining Progress Test</h2>
+            
+            <div class="mb-4">
+                <div class="flex justify-between text-sm text-gray-600 mb-2">
+                    <span>Progress</span>
+                    <span id="testProgressText">0%</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-4">
+                    <div id="testProgressBar" class="bg-green-600 h-4 rounded-full transition-all duration-300" style="width: 0%"></div>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-3 gap-4 text-center mb-6">
+                <div>
+                    <p class="text-sm text-gray-600">Hashes</p>
+                    <p id="testHashCount" class="text-lg font-bold text-blue-600">0</p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-600">Nonce</p>
+                    <p id="testNonce" class="text-lg font-bold text-purple-600">0</p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-600">Time</p>
+                    <p id="testTime" class="text-lg font-bold text-orange-600">0s</p>
+                </div>
+            </div>
+            
+            <div class="flex space-x-4">
+                <button id="testStart" class="bg-green-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-green-700 transition">
+                    Start Test
+                </button>
+                <button id="testStop" class="bg-red-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-red-700 transition" disabled>
+                    Stop Test
+                </button>
+                <button id="testReset" class="bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition">
+                    Reset
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let testInterval = null;
+        let testStartTime = null;
+        let testDuration = 30; // 30 seconds
+        let testHashes = 0;
+        let isTestRunning = false;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('testStart').addEventListener('click', startTest);
+            document.getElementById('testStop').addEventListener('click', stopTest);
+            document.getElementById('testReset').addEventListener('click', resetTest);
+        });
+
+        function startTest() {
+            if (isTestRunning) return;
+            
+            isTestRunning = true;
+            testStartTime = Date.now();
+            testHashes = 0;
+            
+            document.getElementById('testStart').disabled = true;
+            document.getElementById('testStop').disabled = false;
+            
+            testInterval = setInterval(() => {
+                const elapsed = (Date.now() - testStartTime) / 1000;
+                const progress = Math.min(elapsed / testDuration * 100, 100);
+                
+                // Update progress bar
+                const progressBar = document.getElementById('testProgressBar');
+                const progressText = document.getElementById('testProgressText');
+                
+                progressBar.style.width = progress + '%';
+                progressText.textContent = Math.round(progress) + '%';
+                
+                // Update stats
+                testHashes += 1000 + Math.random() * 5000;
+                document.getElementById('testHashCount').textContent = testHashes.toLocaleString();
+                document.getElementById('testNonce').textContent = Math.floor(testHashes / 1000).toLocaleString();
+                document.getElementById('testTime').textContent = Math.floor(elapsed) + 's';
+                
+                // Check if complete
+                if (elapsed >= testDuration) {
+                    completeTest();
+                }
+            }, 100);
+        }
+
+        function stopTest() {
+            if (!isTestRunning) return;
+            
+            isTestRunning = false;
+            clearInterval(testInterval);
+            
+            document.getElementById('testStart').disabled = false;
+            document.getElementById('testStop').disabled = true;
+        }
+
+        function resetTest() {
+            stopTest();
+            
+            const progressBar = document.getElementById('testProgressBar');
+            const progressText = document.getElementById('testProgressText');
+            
+            progressBar.style.width = '0%';
+            progressText.textContent = '0%';
+            
+            document.getElementById('testHashCount').textContent = '0';
+            document.getElementById('testNonce').textContent = '0';
+            document.getElementById('testTime').textContent = '0s';
+        }
+
+        function completeTest() {
+            stopTest();
+            alert('Test completed! Progress bar should have reached 100%');
+        }
+    </script>
+</body>
+</html>

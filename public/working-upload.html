@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Working Upload - UUBI System</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            padding: 20px; 
+            max-width: 800px; 
+            margin: 0 auto;
+            background: #f8f9fa;
+        }
+        .upload-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin: 20px 0;
+        }
+        .upload-area { 
+            border: 3px dashed #007bff; 
+            padding: 40px; 
+            text-align: center; 
+            margin: 20px 0;
+            background: #f8f9fa;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        .upload-area:hover { 
+            background: #e3f2fd; 
+            border-color: #0056b3;
+            transform: scale(1.02);
+        }
+        .upload-area.dragover {
+            background: #e8f5e8;
+            border-color: #28a745;
+        }
+        .result { 
+            background: #f8f9fa; 
+            border: 1px solid #dee2e6; 
+            padding: 15px; 
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .success { background: #d4edda; border-color: #c3e6cb; color: #155724; }
+        .error { background: #f8d7da; border-color: #f5c6cb; color: #721c24; }
+        button {
+            background: #007bff;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+            font-size: 16px;
+        }
+        button:hover { background: #0056b3; }
+        .file-info {
+            background: #e9ecef;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        h1 { color: #333; text-align: center; }
+        h3 { color: #007bff; margin-top: 0; }
+    </style>
+</head>
+<body>
+    <h1>🔧 Working Upload System</h1>
+    <p style="text-align: center; color: #666;">This page demonstrates working file upload functionality</p>
+    
+    <div class="upload-container">
+        <h3>📸 Biometric Image Upload</h3>
+        <div class="upload-area" id="biometricUpload">
+            <h4>📁 Click Here to Upload Biometric Image</h4>
+            <p>Drag and drop or click to select an image file</p>
+            <input type="file" id="biometricImage" accept="image/*" style="display: none;">
+        </div>
+        <div id="biometricResult" class="result">No file selected</div>
+    </div>
+    
+    <div class="upload-container">
+        <h3>🎥 Video Upload</h3>
+        <div class="upload-area" id="videoUpload">
+            <h4>📹 Click Here to Upload Video</h4>
+            <p>Drag and drop or click to select a video file</p>
+            <input type="file" id="livenessVideo" accept="video/*" style="display: none;">
+        </div>
+        <div id="videoResult" class="result">No file selected</div>
+    </div>
+    
+    <div class="upload-container">
+        <h3>📄 Document Upload</h3>
+        <div class="upload-area" id="documentUpload">
+            <h4>📋 Click Here to Upload Document</h4>
+            <p>Drag and drop or click to select a document image</p>
+            <input type="file" id="documentImage" accept="image/*" style="display: none;">
+        </div>
+        <div id="documentResult" class="result">No file selected</div>
+    </div>
+    
+    <div class="upload-container">
+        <h3>🧪 Test API Upload</h3>
+        <button onclick="testAPIUpload()">Test Upload to Server</button>
+        <div id="apiResult" class="result">Click button to test server upload</div>
+    </div>
+    
+    <div class="upload-container">
+        <h3>📊 Debug Information</h3>
+        <div id="debugInfo" class="file-info">Loading debug information...</div>
+    </div>
+    
+    <script>
+        // Simple, reliable file upload handling
+        function setupUpload(inputId, uploadId, resultId, fileType) {
+            const input = document.getElementById(inputId);
+            const upload = document.getElementById(uploadId);
+            const result = document.getElementById(resultId);
+            
+            if (!input || !upload || !result) {
+                console.error(`Missing elements for ${inputId}`);
+                return;
+            }
+            
+            // Click to upload
+            upload.addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log(`Clicked upload for ${inputId}`);
+                input.click();
+            });
+            
+            // File selection
+            input.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const fileSize = fileType === 'video' ? 
+                        `${(file.size / 1024 / 1024).toFixed(2)} MB` : 
+                        `${(file.size / 1024).toFixed(1)} KB`;
+                    
+                    result.innerHTML = `
+                        ✅ <strong>${file.name}</strong><br>
+                        Size: ${fileSize}<br>
+                        Type: ${file.type}
+                    `;
+                    result.className = 'result success';
+                    console.log(`File selected: ${file.name} (${fileSize})`);
+                } else {
+                    result.innerHTML = 'No file selected';
+                    result.className = 'result';
+                }
+            });
+            
+            // Drag and drop
+            upload.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                upload.classList.add('dragover');
+            });
+            
+            upload.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                upload.classList.remove('dragover');
+            });
+            
+            upload.addEventListener('drop', function(e) {
+                e.preventDefault();
+                upload.classList.remove('dragover');
+                
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    input.files = files;
+                    input.dispatchEvent(new Event('change'));
+                }
+            });
+        }
+        
+        // Test API upload
+        async function testAPIUpload() {
+            const biometricFile = document.getElementById('biometricImage').files[0];
+            const videoFile = document.getElementById('livenessVideo').files[0];
+            const documentFile = document.getElementById('documentImage').files[0];
+            
+            const apiResult = document.getElementById('apiResult');
+            
+            if (!biometricFile && !videoFile && !documentFile) {
+                apiResult.innerHTML = '❌ Please select at least one file first';
+                apiResult.className = 'result error';
+                return;
+            }
+            
+            apiResult.innerHTML = '🔄 Testing upload to server...';
+            apiResult.className = 'result';
+            
+            try {
+                const formData = new FormData();
+                if (biometricFile) formData.append('image', biometricFile);
+                if (videoFile) formData.append('video', videoFile);
+                
+                const response = await fetch('/api/test-video-liveness', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    apiResult.innerHTML = `✅ Upload successful!<br>Response: ${JSON.stringify(result.data, null, 2)}`;
+                    apiResult.className = 'result success';
+                } else {
+                    apiResult.innerHTML = `❌ Upload failed: ${result.error}`;
+                    apiResult.className = 'result error';
+                }
+            } catch (error) {
+                apiResult.innerHTML = `❌ Error: ${error.message}`;
+                apiResult.className = 'result error';
+            }
+        }
+        
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Setting up upload functionality...');
+            
+            // Setup all upload areas
+            setupUpload('biometricImage', 'biometricUpload', 'biometricResult', 'image');
+            setupUpload('livenessVideo', 'videoUpload', 'videoResult', 'video');
+            setupUpload('documentImage', 'documentUpload', 'documentResult', 'image');
+            
+            // Debug information
+            const debugInfo = document.getElementById('debugInfo');
+            debugInfo.innerHTML = `
+                <strong>System Status:</strong><br>
+                ✅ JavaScript: Enabled<br>
+                ✅ File API: ${window.FileReader ? 'Supported' : 'Not Supported'}<br>
+                ✅ Drag & Drop: ${window.DataTransfer ? 'Supported' : 'Not Supported'}<br>
+                ✅ Fetch API: ${window.fetch ? 'Supported' : 'Not Supported'}<br>
+                🌐 User Agent: ${navigator.userAgent.split(' ')[0]}<br>
+                📅 Loaded: ${new Date().toLocaleString()}
+            `;
+            
+            console.log('✅ Upload system initialized successfully');
+        });
+        
+        // Global error handling
+        window.addEventListener('error', function(e) {
+            console.error('JavaScript Error:', e.error);
+        });
+    </script>
+</body>
+</html>

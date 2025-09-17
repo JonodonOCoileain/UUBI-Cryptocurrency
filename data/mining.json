@@ -1,0 +1,21 @@
+{
+  "ubiPool": 18,
+  "totalMined": 26,
+  "miningHistory": [
+    {
+      "userId": "jontwlc@gmail.com",
+      "timestamp": "2025-09-17T17:50:22.164Z",
+      "totalCoins": 26,
+      "userShare": 8,
+      "ubiShare": 18,
+      "miningTime": 4,
+      "miningPower": 2.1739837463632625
+    }
+  ],
+  "userBalances": [
+    [
+      "jontwlc@gmail.com",
+      8
+    ]
+  ]
+}

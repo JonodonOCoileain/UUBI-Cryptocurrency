@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UUBI Cryptocurrency - Fixed Upload</title>
+    <script>
+        // Prevent HTTPS redirects for localhost
+        if (window.location.protocol === 'https:' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
+            window.location.replace('http://localhost:3000' + window.location.pathname + window.location.search + window.location.hash);
+        }
+    </script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .upload-area { 
+            border: 2px dashed #ccc; 
+            padding: 20px; 
+            text-align: center; 
+            cursor: pointer;
+            background: #f9f9f9;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        .upload-area:hover { 
+            background: #e9ecef; 
+            border-color: #007bff;
+        }
+        .upload-area.dragover {
+            background: #e8f5e8;
+            border-color: #28a745;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold text-center mb-8">UUBI Cryptocurrency - Fixed Upload</h1>
+        
+        <div class="bg-white rounded-lg shadow-lg p-6 max-w-2xl mx-auto">
+            <h2 class="text-2xl font-bold mb-6">Identity Registration</h2>
+            
+            <!-- Biometric Upload -->
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                    Biometric Photo (Face Scan)
+                </label>
+                <div class="upload-area" id="biometricUpload">
+                    <i class="fas fa-camera text-4xl text-gray-400 mb-4"></i>
+                    <p class="text-gray-600 mb-2">Click to upload or drag and drop</p>
+                    <p class="text-sm text-gray-500">PNG, JPG up to 10MB</p>
+                    <input type="file" id="biometricImage" accept="image/*" class="hidden">
+                </div>
+                <div id="biometricResult" class="mt-2 text-sm text-gray-600">No file selected</div>
+            </div>
+            
+            <!-- Video Upload -->
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                    Liveness Video (Optional but Recommended)
+                </label>
+                <div class="upload-area" id="videoUpload">
+                    <i class="fas fa-video text-4xl text-blue-400 mb-4"></i>
+                    <p class="text-blue-600 mb-2">Click to record or upload video</p>
+                    <p class="text-sm text-blue-500">MP4, MOV up to 50MB</p>
+                    <input type="file" id="livenessVideo" accept="video/*" class="hidden">
+                </div>
+                <div id="videoResult" class="mt-2 text-sm text-gray-600">No file selected</div>
+            </div>
+            
+            <!-- Document Upload -->
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                    Identity Document
+                </label>
+                <div class="upload-area" id="documentUpload">
+                    <i class="fas fa-id-card text-4xl text-green-400 mb-4"></i>
+                    <p class="text-green-600 mb-2">Click to upload document</p>
+                    <p class="text-sm text-green-500">PNG, JPG up to 10MB</p>
+                    <input type="file" id="documentImage" accept="image/*" class="hidden">
+                </div>
+                <div id="documentResult" class="mt-2 text-sm text-gray-600">No file selected</div>
+            </div>
+            
+            <!-- Test Button -->
+            <div class="text-center">
+                <button id="testUpload" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
+                    Test Upload Functionality
+                </button>
+            </div>
+            
+            <div id="testResult" class="mt-4 p-4 bg-gray-50 rounded-lg hidden">
+                <h3 class="font-bold mb-2">Test Results:</h3>
+                <div id="testOutput"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Simple, working file upload system
+        function setupSimpleUpload(inputId, uploadId, resultId) {
+            const input = document.getElementById(inputId);
+            const upload = document.getElementById(uploadId);
+            const result = document.getElementById(resultId);
+            
+            if (!input || !upload || !result) {
+                console.error(`Missing elements for ${inputId}`);
+                return false;
+            }
+            
+            // Click to upload
+            upload.addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log(`Clicked upload for ${inputId}`);
+                input.click();
+            });
+            
+            // File selection
+            input.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const fileSize = file.size > 1024 * 1024 ? 
+                        `${(file.size / 1024 / 1024).toFixed(2)} MB` : 
+                        `${(file.size / 1024).toFixed(1)} KB`;
+                    
+                    result.innerHTML = `✅ Selected: ${file.name} (${fileSize})`;
+                    result.className = 'mt-2 text-sm text-green-600';
+                    console.log(`File selected: ${file.name}`);
+                } else {
+                    result.innerHTML = 'No file selected';
+                    result.className = 'mt-2 text-sm text-gray-600';
+                }
+            });
+            
+            // Drag and drop
+            upload.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                upload.classList.add('dragover');
+            });
+            
+            upload.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                upload.classList.remove('dragover');
+            });
+            
+            upload.addEventListener('drop', function(e) {
+                e.preventDefault();
+                upload.classList.remove('dragover');
+                
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    input.files = files;
+                    input.dispatchEvent(new Event('change'));
+                }
+            });
+            
+            return true;
+        }
+        
+        // Test upload functionality
+        function testUploads() {
+            const biometricFile = document.getElementById('biometricImage').files[0];
+            const videoFile = document.getElementById('livenessVideo').files[0];
+            const documentFile = document.getElementById('documentImage').files[0];
+            
+            const testResult = document.getElementById('testResult');
+            const testOutput = document.getElementById('testOutput');
+            
+            let results = [];
+            
+            if (biometricFile) {
+                results.push(`✅ Biometric: ${biometricFile.name}`);
+            } else {
+                results.push('❌ No biometric file');
+            }
+            
+            if (videoFile) {
+                results.push(`✅ Video: ${videoFile.name}`);
+            } else {
+                results.push('❌ No video file');
+            }
+            
+            if (documentFile) {
+                results.push(`✅ Document: ${documentFile.name}`);
+            } else {
+                results.push('❌ No document file');
+            }
+            
+            testOutput.innerHTML = results.join('<br>');
+            testResult.classList.remove('hidden');
+        }
+        
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Setting up simple upload system...');
+            
+            // Setup uploads
+            const biometricOk = setupSimpleUpload('biometricImage', 'biometricUpload', 'biometricResult');
+            const videoOk = setupSimpleUpload('livenessVideo', 'videoUpload', 'videoResult');
+            const documentOk = setupSimpleUpload('documentImage', 'documentUpload', 'documentResult');
+            
+            // Setup test button
+            const testButton = document.getElementById('testUpload');
+            if (testButton) {
+                testButton.addEventListener('click', testUploads);
+            }
+            
+            console.log('Upload setup results:', {
+                biometric: biometricOk,
+                video: videoOk,
+                document: documentOk
+            });
+            
+            if (biometricOk && videoOk && documentOk) {
+                console.log('✅ All upload areas configured successfully');
+            } else {
+                console.error('❌ Some upload areas failed to configure');
+            }
+        });
+    </script>
+</body>
+</html>

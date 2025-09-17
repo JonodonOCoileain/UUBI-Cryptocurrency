@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wallet Debug Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        button { padding: 10px 20px; margin: 10px; font-size: 16px; }
+        .success { color: green; }
+        .error { color: red; }
+        .info { color: blue; }
+        #debug { background: #f0f0f0; padding: 10px; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>Wallet Connection Debug Test</h1>
+    
+    <div>
+        <button id="connectWallet">Connect New Wallet</button>
+        <button id="testFunction">Test Function</button>
+    </div>
+    
+    <div id="walletInfo">
+        <p>Wallet Address: <span id="walletAddress">Not connected</span></p>
+        <p>Network: <span id="network">Unknown</span></p>
+    </div>
+    
+    <div id="messages"></div>
+    <div id="debug"></div>
+
+    <script>
+        // Debug function
+        function debugLog(message) {
+            const debugDiv = document.getElementById('debug');
+            debugDiv.innerHTML += '<div>' + new Date().toLocaleTimeString() + ': ' + message + '</div>';
+            console.log('DEBUG:', message);
+        }
+        
+        // Test function
+        function testFunction() {
+            debugLog('Test function called');
+            showMessage('Test function works!', 'success');
+        }
+        
+        // Simple wallet connection function
+        async function connectWallet() {
+            debugLog('connectWallet function called');
+            
+            const button = document.getElementById('connectWallet');
+            if (!button) {
+                debugLog('ERROR: Connect wallet button not found');
+                return;
+            }
+            
+            try {
+                debugLog('Starting wallet connection...');
+                
+                // Show loading state
+                button.disabled = true;
+                button.innerHTML = 'Connecting...';
+                debugLog('Button state updated to loading');
+                
+                // Check if Web3 is available
+                if (typeof window.ethereum === 'undefined') {
+                    debugLog('ERROR: No Web3 wallet detected');
+                    throw new Error('MetaMask or other Web3 wallet not detected. Please install MetaMask.');
+                }
+                
+                debugLog('Web3 wallet detected');
+                
+                // Request account access
+                debugLog('Requesting account access...');
+                const accounts = await window.ethereum.request({ 
+                    method: 'eth_requestAccounts' 
+                });
+                
+                debugLog('Account request completed, accounts: ' + JSON.stringify(accounts));
+                
+                if (!accounts || accounts.length === 0) {
+                    debugLog('ERROR: No accounts found');
+                    throw new Error('No accounts found. Please unlock your wallet.');
+                }
+                
+                const walletAddress = accounts[0];
+                debugLog('Wallet connected: ' + walletAddress);
+                
+                // Update UI
+                updateWalletUI(walletAddress);
+                showMessage('✅ Wallet connected successfully!', 'success');
+                debugLog('UI updated successfully');
+                
+            } catch (error) {
+                debugLog('ERROR: ' + error.message);
+                console.error('❌ Wallet connection failed:', error);
+                resetWalletButton();
+                showMessage('❌ Failed to connect wallet: ' + error.message, 'error');
+            }
+        }
+        
+        function updateWalletUI(address) {
+            debugLog('Updating UI with address: ' + address);
+            
+            const walletAddressElement = document.getElementById('walletAddress');
+            const networkElement = document.getElementById('network');
+            const button = document.getElementById('connectWallet');
+            
+            if (walletAddressElement) {
+                walletAddressElement.textContent = address;
+                walletAddressElement.style.color = '#28a745';
+                walletAddressElement.style.fontWeight = 'bold';
+                debugLog('Wallet address element updated');
+            }
+            
+            if (networkElement) {
+                networkElement.textContent = 'Connected';
+                networkElement.style.color = '#28a745';
+                debugLog('Network element updated');
+            }
+            
+            if (button) {
+                button.innerHTML = 'Connected';
+                button.style.backgroundColor = '#28a745';
+                button.style.color = 'white';
+                debugLog('Button updated to connected state');
+            }
+        }
+        
+        function resetWalletButton() {
+            debugLog('Resetting wallet button');
+            const button = document.getElementById('connectWallet');
+            if (button) {
+                button.disabled = false;
+                button.innerHTML = 'Connect New Wallet';
+                button.style.backgroundColor = '';
+                button.style.color = '';
+                debugLog('Button reset completed');
+            }
+        }
+        
+        function showMessage(message, type) {
+            const messagesDiv = document.getElementById('messages');
+            const messageEl = document.createElement('div');
+            messageEl.textContent = message;
+            messageEl.className = type;
+            messagesDiv.appendChild(messageEl);
+            debugLog('Message shown: ' + message);
+            
+            // Remove message after 5 seconds
+            setTimeout(() => {
+                if (messageEl.parentNode) {
+                    messageEl.parentNode.removeChild(messageEl);
+                }
+            }, 5000);
+        }
+        
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            debugLog('DOM loaded, setting up event listeners');
+            
+            const connectBtn = document.getElementById('connectWallet');
+            const testBtn = document.getElementById('testFunction');
+            
+            if (connectBtn) {
+                connectBtn.onclick = function(e) {
+                    e.preventDefault();
+                    debugLog('Connect wallet button clicked');
+                    connectWallet();
+                };
+                debugLog('Connect wallet button listener added');
+            } else {
+                debugLog('ERROR: Connect wallet button not found during setup');
+            }
+            
+            if (testBtn) {
+                testBtn.onclick = function(e) {
+                    e.preventDefault();
+                    debugLog('Test button clicked');
+                    testFunction();
+                };
+                debugLog('Test button listener added');
+            }
+            
+            debugLog('Event listeners setup completed');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Main Button</title>
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        button { 
+            padding: 10px 20px; 
+            margin: 10px; 
+            font-size: 16px; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer;
+            background: #6f42c1;
+            color: white;
+        }
+        button:hover { background: #5a32a3; }
+        #output { margin-top: 20px; padding: 10px; background: #f0f0f0; }
+    </style>
+</head>
+<body>
+    <h1>Test Main Page Button</h1>
+    
+    <button id="connectWallet" class="bg-white text-purple-600 px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition">
+        <i class="fas fa-wallet mr-2"></i>Connect New Wallet
+    </button>
+    
+    <div id="output"></div>
+
+    <script>
+        function log(message) {
+            const output = document.getElementById('output');
+            output.innerHTML += '<div>' + new Date().toLocaleTimeString() + ': ' + message + '</div>';
+            console.log(message);
+        }
+        
+        // Test the exact same function from the main page
+        async function connectWallet() {
+            log('🔗 Starting wallet connection...');
+            
+            const button = document.getElementById('connectWallet');
+            if (!button) {
+                log('❌ Connect wallet button not found');
+                return;
+            }
+            
+            try {
+                // Show loading state
+                button.disabled = true;
+                button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Connecting...';
+                
+                // Check if Web3 is available
+                if (typeof window.ethereum === 'undefined') {
+                    throw new Error('MetaMask or other Web3 wallet not detected. Please install MetaMask.');
+                }
+                
+                // Request account access
+                const accounts = await window.ethereum.request({ 
+                    method: 'eth_requestAccounts' 
+                });
+                
+                if (!accounts || accounts.length === 0) {
+                    throw new Error('No accounts found. Please unlock your wallet.');
+                }
+                
+                const walletAddress = accounts[0];
+                log('✅ Wallet connected: ' + walletAddress);
+                
+                // Update button state
+                button.innerHTML = '<i class="fas fa-check mr-2"></i>Connected';
+                button.style.background = '#28a745';
+                button.style.color = 'white';
+                
+                log('✅ Wallet connection successful!');
+                
+            } catch (error) {
+                log('❌ Wallet connection failed: ' + error.message);
+                button.disabled = false;
+                button.innerHTML = '<i class="fas fa-wallet mr-2"></i>Connect New Wallet';
+                button.style.background = '';
+                button.style.color = '';
+            }
+        }
+        
+        // Setup button click handler
+        document.addEventListener('DOMContentLoaded', function() {
+            log('🚀 DOM loaded, setting up button...');
+            
+            const connectBtn = document.getElementById('connectWallet');
+            if (connectBtn) {
+                connectBtn.onclick = function(e) {
+                    e.preventDefault();
+                    log('🔗 Connect wallet button clicked');
+                    connectWallet();
+                };
+                log('✅ Connect wallet button listener added');
+            } else {
+                log('❌ Connect wallet button not found');
+            }
+        });
+    </script>
+</body>
+</html>

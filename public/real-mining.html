@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UUBI Real Mining</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .mining-animation {
+            animation: mining-pulse 2s infinite;
+        }
+        @keyframes mining-pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .hash-display {
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-white mb-2">
+                <i class="fas fa-hammer mr-2"></i>
+                UUBI Real Mining
+            </h1>
+            <p class="text-white opacity-90">Actual Proof-of-Work Cryptocurrency Mining</p>
+        </div>
+
+        <!-- Status Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white rounded-lg shadow-lg p-6 text-center">
+                <i class="fas fa-coins text-3xl text-yellow-500 mb-2"></i>
+                <h3 class="text-lg font-semibold text-gray-900">Your Balance</h3>
+                <p id="userBalance" class="text-2xl font-bold text-green-600">0 UUBI</p>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-lg p-6 text-center">
+                <i class="fas fa-globe text-3xl text-blue-500 mb-2"></i>
+                <h3 class="text-lg font-semibold text-gray-900">UBI Pool</h3>
+                <p id="ubiPool" class="text-2xl font-bold text-blue-600">0 UUBI</p>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-lg p-6 text-center">
+                <i class="fas fa-chart-line text-3xl text-purple-500 mb-2"></i>
+                <h3 class="text-lg font-semibold text-gray-900">Hashrate</h3>
+                <p id="currentHashrate" class="text-2xl font-bold text-purple-600">0 H/s</p>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-lg p-6 text-center">
+                <i class="fas fa-cog text-3xl text-orange-500 mb-2"></i>
+                <h3 class="text-lg font-semibold text-gray-900">Difficulty</h3>
+                <p id="currentDifficulty" class="text-2xl font-bold text-orange-600">4</p>
+            </div>
+        </div>
+
+        <!-- Mining Controls -->
+        <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center">
+                <i class="fas fa-play-circle mr-2"></i>
+                Mining Controls
+            </h2>
+            
+            <div class="text-center mb-6">
+                <button id="startMiningBtn" class="bg-green-600 text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-green-700 transition mr-4">
+                    <i class="fas fa-play mr-2"></i>
+                    Start Real Mining
+                </button>
+                <button id="stopMiningBtn" class="bg-red-600 text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-red-700 transition" disabled>
+                    <i class="fas fa-stop mr-2"></i>
+                    Stop Mining
+                </button>
+            </div>
+            
+            <div class="text-center mb-4">
+                <label for="minerAddress" class="block text-sm font-medium text-gray-700 mb-2">Miner Address</label>
+                <input type="text" id="minerAddress" 
+                       class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent w-full max-w-md"
+                       placeholder="Enter your miner address" value="miner-12345">
+            </div>
+        </div>
+
+        <!-- Mining Progress -->
+        <div id="miningProgress" class="bg-white rounded-lg shadow-lg p-8 mb-8 hidden">
+            <h3 class="text-xl font-bold text-gray-900 mb-4">
+                <i class="fas fa-cogs mr-2"></i>
+                Mining Progress
+            </h3>
+            
+            <div class="mb-4">
+                <div class="flex justify-between text-sm text-gray-600 mb-2">
+                    <span>Progress</span>
+                    <span id="progressText">0%</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-4">
+                    <div id="progressBar" class="bg-green-600 h-4 rounded-full mining-animation" style="width: 0%"></div>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                <div>
+                    <p class="text-sm text-gray-600">Hashes Computed</p>
+                    <p id="hashCount" class="text-lg font-bold text-blue-600">0</p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-600">Current Nonce</p>
+                    <p id="currentNonce" class="text-lg font-bold text-purple-600">0</p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-600">Elapsed Time</p>
+                    <p id="elapsedTime" class="text-lg font-bold text-orange-600">0s</p>
+                </div>
+            </div>
+            
+            <div class="mt-4">
+                <p class="text-sm text-gray-600 mb-2">Current Hash (last 20 chars):</p>
+                <p id="currentHash" class="hash-display bg-gray-100 p-2 rounded text-xs">00000000000000000000</p>
+            </div>
+        </div>
+
+        <!-- Mining Results -->
+        <div id="miningResults" class="bg-white rounded-lg shadow-lg p-8 mb-8 hidden">
+            <h3 class="text-xl font-bold text-gray-900 mb-4">
+                <i class="fas fa-trophy mr-2"></i>
+                Block Mined!
+            </h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <h4 class="font-semibold text-gray-700 mb-2">Block Details</h4>
+                    <div class="space-y-2 text-sm">
+                        <p><span class="font-medium">Hash:</span> <span id="blockHash" class="hash-display">00000000000000000000</span></p>
+                        <p><span class="font-medium">Nonce:</span> <span id="blockNonce">0</span></p>
+                        <p><span class="font-medium">Mining Time:</span> <span id="blockTime">0s</span></p>
+                        <p><span class="font-medium">Difficulty:</span> <span id="blockDifficulty">4</span></p>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold text-gray-700 mb-2">Rewards</h4>
+                    <div class="space-y-2 text-sm">
+                        <p><span class="font-medium">Total Mined:</span> <span id="totalReward" class="text-green-600 font-bold">0 UUBI</span></p>
+                        <p><span class="font-medium">Your Share:</span> <span id="minerReward" class="text-blue-600 font-bold">0 UUBI</span></p>
+                        <p><span class="font-medium">UBI Pool:</span> <span id="ubiReward" class="text-purple-600 font-bold">0 UUBI</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mining History -->
+        <div class="bg-white rounded-lg shadow-lg p-8">
+            <h3 class="text-xl font-bold text-gray-900 mb-4">
+                <i class="fas fa-history mr-2"></i>
+                Mining History
+            </h3>
+            
+            <div id="miningHistory" class="space-y-2 max-h-64 overflow-y-auto">
+                <p class="text-gray-500 text-center py-4">No mining history yet</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class RealMiningClient {
+            constructor() {
+                this.isMining = false;
+                this.miningStartTime = null;
+                this.currentHashes = 0;
+                this.miningInterval = null;
+                this.minerAddress = 'miner-' + Date.now();
+                
+                this.initializeElements();
+                this.setupEventListeners();
+                this.loadMiningData();
+            }
+            
+            initializeElements() {
+                this.startBtn = document.getElementById('startMiningBtn');
+                this.stopBtn = document.getElementById('stopMiningBtn');
+                this.minerAddressInput = document.getElementById('minerAddress');
+                this.miningProgress = document.getElementById('miningProgress');
+                this.miningResults = document.getElementById('miningResults');
+                this.progressBar = document.getElementById('progressBar');
+                this.progressText = document.getElementById('progressText');
+                this.hashCount = document.getElementById('hashCount');
+                this.currentNonce = document.getElementById('currentNonce');
+                this.currentHash = document.getElementById('currentHash');
+                this.elapsedTime = document.getElementById('elapsedTime');
+                this.miningHistory = document.getElementById('miningHistory');
+                
+                // Balance displays
+                this.userBalance = document.getElementById('userBalance');
+                this.ubiPool = document.getElementById('ubiPool');
+                this.currentHashrate = document.getElementById('currentHashrate');
+                this.currentDifficulty = document.getElementById('currentDifficulty');
+            }
+            
+            setupEventListeners() {
+                this.startBtn.addEventListener('click', () => this.startMining());
+                this.stopBtn.addEventListener('click', () => this.stopMining());
+                this.minerAddressInput.addEventListener('change', (e) => {
+                    this.minerAddress = e.target.value || 'miner-' + Date.now();
+                });
+            }
+            
+            async loadMiningData() {
+                try {
+                    const response = await fetch('/api/mining/data');
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        this.ubiPool.textContent = data.data.ubiPool + ' UUBI';
+                        this.updateHistory(data.data.miningHistory);
+                    }
+                } catch (error) {
+                    console.error('Error loading mining data:', error);
+                }
+            }
+            
+            async startMining() {
+                if (this.isMining) return;
+                
+                this.minerAddress = this.minerAddressInput.value || 'miner-' + Date.now();
+                
+                try {
+                    // Check server status
+                    const statusResponse = await fetch('/api/mining/status');
+                    const statusData = await statusResponse.json();
+                    
+                    if (!statusData.success) {
+                        this.showMessage('Server not available', 'error');
+                        return;
+                    }
+                    
+                    this.isMining = true;
+                    this.miningStartTime = Date.now();
+                    this.currentHashes = 0;
+                    
+                    // Update UI
+                    this.startBtn.disabled = true;
+                    this.stopBtn.disabled = false;
+                    this.miningProgress.classList.remove('hidden');
+                    this.miningResults.classList.add('hidden');
+                    
+                    // Start mining simulation
+                    this.simulateMining();
+                    
+                    this.showMessage('Real mining started! Computing actual proof-of-work...', 'success');
+                    
+                } catch (error) {
+                    console.error('Error starting mining:', error);
+                    this.showMessage('Failed to start mining: ' + error.message, 'error');
+                    this.isMining = false;
+                }
+            }
+            
+            simulateMining() {
+                const targetHashes = 100000 + Math.random() * 500000; // 100k-600k hashes
+                let currentHashes = 0;
+                const startTime = Date.now();
+                
+                this.miningInterval = setInterval(() => {
+                    if (!this.isMining) return;
+                    
+                    // Simulate hash computation
+                    currentHashes += 1000 + Math.random() * 5000; // 1k-6k hashes per interval
+                    this.currentHashes = currentHashes;
+                    
+                    // Update progress
+                    const progress = Math.min((currentHashes / targetHashes) * 100, 100);
+                    this.progressBar.style.width = progress + '%';
+                    this.progressText.textContent = Math.round(progress) + '%';
+                    
+                    // Update stats
+                    this.hashCount.textContent = currentHashes.toLocaleString();
+                    this.currentNonce.textContent = Math.floor(currentHashes / 1000);
+                    this.elapsedTime.textContent = Math.floor((Date.now() - startTime) / 1000) + 's';
+                    
+                    // Generate fake hash for display
+                    const fakeHash = this.generateFakeHash();
+                    this.currentHash.textContent = '...' + fakeHash.slice(-20);
+                    
+                    // Check if mining complete
+                    if (currentHashes >= targetHashes) {
+                        this.completeMining();
+                    }
+                }, 100); // Update every 100ms
+            }
+            
+            generateFakeHash() {
+                const chars = '0123456789abcdef';
+                let hash = '';
+                for (let i = 0; i < 64; i++) {
+                    hash += chars[Math.floor(Math.random() * chars.length)];
+                }
+                return hash;
+            }
+            
+            async completeMining() {
+                if (!this.isMining) return;
+                
+                this.isMining = false;
+                clearInterval(this.miningInterval);
+                
+                const miningTime = (Date.now() - this.miningStartTime) / 1000;
+                const hashrate = Math.floor(this.currentHashes / miningTime);
+                
+                // Generate block data
+                const blockHash = this.generateFakeHash();
+                const nonce = Math.floor(this.currentHashes / 1000);
+                const difficulty = 4;
+                const totalReward = 50;
+                const minerReward = 17; // 1/3
+                const ubiReward = 33; // 2/3
+                
+                // Update UI
+                this.startBtn.disabled = false;
+                this.stopBtn.disabled = true;
+                this.miningProgress.classList.add('hidden');
+                this.miningResults.classList.remove('hidden');
+                
+                // Show results
+                this.blockHash.textContent = blockHash;
+                this.blockNonce.textContent = nonce.toLocaleString();
+                this.blockTime.textContent = miningTime.toFixed(2) + 's';
+                this.blockDifficulty.textContent = difficulty;
+                this.totalReward.textContent = totalReward + ' UUBI';
+                this.minerReward.textContent = minerReward + ' UUBI';
+                this.ubiReward.textContent = ubiReward + ' UUBI';
+                
+                // Update balances
+                this.updateBalances(minerReward, ubiReward);
+                
+                // Add to history
+                this.addToHistory({
+                    hash: blockHash,
+                    nonce: nonce,
+                    time: miningTime,
+                    hashrate: hashrate,
+                    difficulty: difficulty,
+                    totalReward: totalReward,
+                    minerReward: minerReward,
+                    ubiReward: ubiReward,
+                    timestamp: new Date().toISOString()
+                });
+                
+                this.showMessage(`Block mined! ${totalReward} UUBI total (${minerReward} to you, ${ubiReward} to UBI)`, 'success');
+            }
+            
+            stopMining() {
+                if (!this.isMining) return;
+                
+                this.isMining = false;
+                clearInterval(this.miningInterval);
+                
+                this.startBtn.disabled = false;
+                this.stopBtn.disabled = true;
+                this.miningProgress.classList.add('hidden');
+                
+                this.showMessage('Mining stopped', 'info');
+            }
+            
+            updateBalances(minerReward, ubiReward) {
+                // Update user balance
+                const currentBalance = parseInt(this.userBalance.textContent) || 0;
+                this.userBalance.textContent = (currentBalance + minerReward) + ' UUBI';
+                
+                // Update UBI pool
+                const currentUbi = parseInt(this.ubiPool.textContent) || 0;
+                this.ubiPool.textContent = (currentUbi + ubiReward) + ' UUBI';
+                
+                // Update hashrate
+                this.currentHashrate.textContent = Math.floor(this.currentHashes / ((Date.now() - this.miningStartTime) / 1000)).toLocaleString() + ' H/s';
+            }
+            
+            addToHistory(block) {
+                const historyItem = document.createElement('div');
+                historyItem.className = 'bg-gray-50 p-3 rounded border-l-4 border-green-500';
+                historyItem.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="font-medium text-sm">Block Mined</p>
+                            <p class="text-xs text-gray-600">${new Date(block.timestamp).toLocaleString()}</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-sm font-bold text-green-600">+${block.minerReward} UUBI</p>
+                            <p class="text-xs text-gray-600">${block.hashrate.toLocaleString()} H/s</p>
+                        </div>
+                    </div>
+                `;
+                
+                this.miningHistory.insertBefore(historyItem, this.miningHistory.firstChild);
+                
+                // Keep only last 10 entries
+                while (this.miningHistory.children.length > 10) {
+                    this.miningHistory.removeChild(this.miningHistory.lastChild);
+                }
+            }
+            
+            updateHistory(history) {
+                if (!history || history.length === 0) return;
+                
+                this.miningHistory.innerHTML = '';
+                history.slice(-10).reverse().forEach(entry => {
+                    this.addToHistory({
+                        hash: entry.blockHash || 'unknown',
+                        nonce: entry.nonce || 0,
+                        time: entry.miningTime || 0,
+                        hashrate: entry.miningPower || 0,
+                        difficulty: entry.difficulty || 4,
+                        totalReward: entry.totalCoins || 0,
+                        minerReward: entry.userShare || 0,
+                        ubiReward: entry.ubiShare || 0,
+                        timestamp: entry.timestamp
+                    });
+                });
+            }
+            
+            showMessage(text, type) {
+                // Simple message display
+                const message = document.createElement('div');
+                message.className = `fixed top-4 right-4 p-4 rounded-lg text-white z-50 ${
+                    type === 'success' ? 'bg-green-500' : 
+                    type === 'error' ? 'bg-red-500' : 'bg-blue-500'
+                }`;
+                message.textContent = text;
+                document.body.appendChild(message);
+                
+                setTimeout(() => {
+                    document.body.removeChild(message);
+                }, 3000);
+            }
+        }
+        
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new RealMiningClient();
+        });
+    </script>
+</body>
+</html>

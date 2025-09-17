@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Button</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        button { 
+            padding: 10px 20px; 
+            margin: 10px; 
+            font-size: 16px; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer;
+            background: #6f42c1;
+            color: white;
+        }
+        button:hover { background: #5a32a3; }
+        #output { margin-top: 20px; padding: 10px; background: #f0f0f0; font-family: monospace; }
+    </style>
+</head>
+<body>
+    <h1>Debug Button Click</h1>
+    
+    <button id="connectWallet">Connect New Wallet</button>
+    <button id="testButton">Test Button</button>
+    
+    <div id="output"></div>
+
+    <script>
+        function log(message) {
+            const output = document.getElementById('output');
+            output.innerHTML += '<div>' + new Date().toLocaleTimeString() + ': ' + message + '</div>';
+            console.log(message);
+        }
+        
+        // Test basic functionality
+        document.getElementById('testButton').onclick = function() {
+            log('✅ Test button clicked!');
+        };
+        
+        // Test connect wallet button with multiple event listeners
+        const connectBtn = document.getElementById('connectWallet');
+        
+        // Method 1: onclick
+        connectBtn.onclick = function(e) {
+            e.preventDefault();
+            log('✅ Connect wallet clicked (onclick)');
+        };
+        
+        // Method 2: addEventListener
+        connectBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            log('✅ Connect wallet clicked (addEventListener)');
+        });
+        
+        // Method 3: mousedown
+        connectBtn.addEventListener('mousedown', function(e) {
+            log('✅ Connect wallet mousedown');
+        });
+        
+        // Method 4: mouseup
+        connectBtn.addEventListener('mouseup', function(e) {
+            log('✅ Connect wallet mouseup');
+        });
+        
+        // Test if button is disabled
+        log('Button disabled: ' + connectBtn.disabled);
+        log('Button style: ' + connectBtn.style.cssText);
+        log('Button classes: ' + connectBtn.className);
+        
+        // Test pointer events
+        const computedStyle = window.getComputedStyle(connectBtn);
+        log('Pointer events: ' + computedStyle.pointerEvents);
+        log('Z-index: ' + computedStyle.zIndex);
+        log('Position: ' + computedStyle.position);
+        
+        log('🚀 Debug setup complete');
+    </script>
+</body>
+</html>

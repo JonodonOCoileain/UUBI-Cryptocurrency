@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ultra Simple Login Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #f0f0f0; }
+        .form { background: white; padding: 20px; margin: 20px 0; border-radius: 5px; }
+        .hidden { display: none; }
+        button { padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 3px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        a { color: #007bff; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <h1>Ultra Simple Login Test</h1>
+    
+    <div id="message"></div>
+    
+    <div id="register" class="form">
+        <h3>Register</h3>
+        <p>This is the registration form</p>
+        <button onclick="switchToLogin()">Login here</button>
+    </div>
+    
+    <div id="login" class="form hidden">
+        <h3>Login</h3>
+        <p>This is the login form</p>
+        <button onclick="switchToRegister()">Register here</button>
+    </div>
+    
+    <script>
+        function switchToLogin() {
+            console.log('Switching to login');
+            document.getElementById('register').classList.add('hidden');
+            document.getElementById('login').classList.remove('hidden');
+            document.getElementById('message').innerHTML = '<p style="color: green;">Switched to login form!</p>';
+        }
+        
+        function switchToRegister() {
+            console.log('Switching to register');
+            document.getElementById('login').classList.add('hidden');
+            document.getElementById('register').classList.remove('hidden');
+            document.getElementById('message').innerHTML = '<p style="color: green;">Switched to register form!</p>';
+        }
+        
+        console.log('Page loaded');
+    </script>
+</body>
+</html>

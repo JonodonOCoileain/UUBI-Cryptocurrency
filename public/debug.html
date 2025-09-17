@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug - UUBI System</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        button { 
+            background: #007bff; 
+            color: white; 
+            padding: 15px 30px; 
+            border: none; 
+            cursor: pointer;
+            margin: 10px;
+            border-radius: 5px;
+        }
+        .debug { 
+            background: #f8f9fa; 
+            border: 1px solid #dee2e6; 
+            padding: 15px; 
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .error { background: #f8d7da; border-color: #f5c6cb; color: #721c24; }
+        .success { background: #d4edda; border-color: #c3e6cb; color: #155724; }
+    </style>
+</head>
+<body>
+    <h1>🔧 UUBI System Debug Page</h1>
+    
+    <div class="debug">
+        <h3>Basic JavaScript Test</h3>
+        <button onclick="testBasicJS()">Test Basic JavaScript</button>
+        <div id="basicResult">Click button to test...</div>
+    </div>
+    
+    <div class="debug">
+        <h3>File Upload Test</h3>
+        <input type="file" id="testFile" accept="image/*">
+        <button onclick="testFileUpload()">Test File Selection</button>
+        <div id="fileResult">Select a file and click test...</div>
+    </div>
+    
+    <div class="debug">
+        <h3>API Connection Test</h3>
+        <button onclick="testAPI()">Test API Connection</button>
+        <div id="apiResult">Click to test API...</div>
+    </div>
+    
+    <div class="debug">
+        <h3>Console Logs</h3>
+        <div id="consoleLogs" style="background: #000; color: #0f0; padding: 10px; font-family: monospace; height: 200px; overflow-y: auto;"></div>
+        <button onclick="clearLogs()">Clear Logs</button>
+    </div>
+    
+    <script>
+        // Override console.log to show in page
+        const originalLog = console.log;
+        const originalError = console.error;
+        
+        function logToPage(message, type = 'log') {
+            const logsDiv = document.getElementById('consoleLogs');
+            const timestamp = new Date().toLocaleTimeString();
+            const color = type === 'error' ? '#f00' : type === 'warn' ? '#ff0' : '#0f0';
+            logsDiv.innerHTML += `<div style="color: ${color}">[${timestamp}] ${message}</div>`;
+            logsDiv.scrollTop = logsDiv.scrollHeight;
+        }
+        
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            logToPage(args.join(' '), 'log');
+        };
+        
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            logToPage('ERROR: ' + args.join(' '), 'error');
+        };
+        
+        console.warn = function(...args) {
+            logToPage('WARN: ' + args.join(' '), 'warn');
+        };
+        
+        // Test functions
+        function testBasicJS() {
+            console.log('Testing basic JavaScript...');
+            try {
+                document.getElementById('basicResult').innerHTML = '✅ JavaScript is working!';
+                console.log('Basic JavaScript test passed');
+            } catch (error) {
+                console.error('Basic JavaScript test failed:', error);
+                document.getElementById('basicResult').innerHTML = '❌ JavaScript error: ' + error.message;
+            }
+        }
+        
+        function testFileUpload() {
+            console.log('Testing file upload...');
+            try {
+                const fileInput = document.getElementById('testFile');
+                if (fileInput.files.length > 0) {
+                    const file = fileInput.files[0];
+                    document.getElementById('fileResult').innerHTML = `✅ File selected: ${file.name} (${(file.size/1024).toFixed(1)} KB)`;
+                    console.log('File upload test passed:', file.name);
+                } else {
+                    document.getElementById('fileResult').innerHTML = '❌ No file selected';
+                    console.log('No file selected for upload test');
+                }
+            } catch (error) {
+                console.error('File upload test failed:', error);
+                document.getElementById('fileResult').innerHTML = '❌ File upload error: ' + error.message;
+            }
+        }
+        
+        async function testAPI() {
+            console.log('Testing API connection...');
+            try {
+                const response = await fetch('http://localhost:3000/api/test');
+                const result = await response.json();
+                document.getElementById('apiResult').innerHTML = '✅ API connected: ' + JSON.stringify(result);
+                console.log('API test passed:', result);
+            } catch (error) {
+                console.error('API test failed:', error);
+                document.getElementById('apiResult').innerHTML = '❌ API error: ' + error.message;
+            }
+        }
+        
+        function clearLogs() {
+            document.getElementById('consoleLogs').innerHTML = '';
+        }
+        
+        // Initial log
+        console.log('Debug page loaded successfully');
+        console.log('Current URL:', window.location.href);
+        console.log('User Agent:', navigator.userAgent);
+    </script>
+</body>
+</html>

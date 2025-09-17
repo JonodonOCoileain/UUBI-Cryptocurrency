@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Wallet Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        button { padding: 15px 30px; margin: 10px; font-size: 18px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+        .message { padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+    </style>
+</head>
+<body>
+    <h1>Simple Wallet Connection Test</h1>
+    
+    <div>
+        <button id="connectBtn">Connect Wallet</button>
+        <button id="testBtn">Test Click</button>
+    </div>
+    
+    <div id="status">
+        <p><strong>Status:</strong> <span id="statusText">Ready</span></p>
+        <p><strong>Wallet:</strong> <span id="walletText">Not connected</span></p>
+    </div>
+    
+    <div id="messages"></div>
+
+    <script>
+        // Simple test function
+        function testClick() {
+            addMessage('Test button clicked!', 'info');
+        }
+        
+        // Simple wallet connection
+        async function connectWallet() {
+            addMessage('Connect wallet function called!', 'info');
+            
+            const btn = document.getElementById('connectBtn');
+            const statusText = document.getElementById('statusText');
+            const walletText = document.getElementById('walletText');
+            
+            try {
+                // Update status
+                statusText.textContent = 'Connecting...';
+                btn.disabled = true;
+                btn.textContent = 'Connecting...';
+                
+                addMessage('Checking for Web3 wallet...', 'info');
+                
+                // Check for Web3
+                if (typeof window.ethereum === 'undefined') {
+                    throw new Error('No Web3 wallet found. Please install MetaMask.');
+                }
+                
+                addMessage('Web3 wallet found!', 'success');
+                
+                // Request accounts
+                addMessage('Requesting account access...', 'info');
+                const accounts = await window.ethereum.request({ 
+                    method: 'eth_requestAccounts' 
+                });
+                
+                if (!accounts || accounts.length === 0) {
+                    throw new Error('No accounts found. Please unlock your wallet.');
+                }
+                
+                const address = accounts[0];
+                addMessage('Wallet connected: ' + address, 'success');
+                
+                // Update UI
+                statusText.textContent = 'Connected';
+                walletText.textContent = address;
+                btn.textContent = 'Connected';
+                btn.style.background = '#28a745';
+                
+            } catch (error) {
+                addMessage('Error: ' + error.message, 'error');
+                statusText.textContent = 'Error';
+                btn.disabled = false;
+                btn.textContent = 'Connect Wallet';
+                btn.style.background = '#007bff';
+            }
+        }
+        
+        function addMessage(text, type) {
+            const messagesDiv = document.getElementById('messages');
+            const messageEl = document.createElement('div');
+            messageEl.textContent = text;
+            messageEl.className = 'message ' + type;
+            messagesDiv.appendChild(messageEl);
+            
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                if (messageEl.parentNode) {
+                    messageEl.parentNode.removeChild(messageEl);
+                }
+            }, 5000);
+        }
+        
+        // Setup when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            addMessage('Page loaded, setting up event listeners...', 'info');
+            
+            const connectBtn = document.getElementById('connectBtn');
+            const testBtn = document.getElementById('testBtn');
+            
+            if (connectBtn) {
+                connectBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    addMessage('Connect button clicked!', 'info');
+                    connectWallet();
+                });
+                addMessage('Connect button listener added', 'success');
+            } else {
+                addMessage('ERROR: Connect button not found!', 'error');
+            }
+            
+            if (testBtn) {
+                testBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    testClick();
+                });
+                addMessage('Test button listener added', 'success');
+            }
+            
+            addMessage('Setup complete!', 'success');
+        });
+    </script>
+</body>
+</html>

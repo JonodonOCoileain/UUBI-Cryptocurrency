@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Button Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .nav { background: #f8f9fa; padding: 20px; margin-bottom: 20px; }
+        .nav-content { display: flex; justify-content: space-between; align-items: center; }
+        .nav-buttons { display: flex; gap: 10px; }
+        button { 
+            padding: 10px 20px; 
+            margin: 5px; 
+            font-size: 16px; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-primary { background: #007bff; color: white; }
+        .btn-primary:hover { background: #0056b3; }
+        .btn-wallet { 
+            background: white; 
+            color: #6f42c1; 
+            border: 1px solid #6f42c1;
+        }
+        .btn-wallet:hover { 
+            background: #f8f9fa; 
+        }
+        .success { color: green; }
+        .error { color: red; }
+        .info { color: blue; }
+        #debug { background: #f0f0f0; padding: 10px; margin: 10px 0; font-family: monospace; }
+    </style>
+</head>
+<body>
+    <h1>Button Clickability Test</h1>
+    
+    <!-- Navigation similar to main page -->
+    <nav class="nav">
+        <div class="nav-content">
+            <div class="nav-buttons">
+                <button class="btn-primary">Register with Email/Phone</button>
+                <button id="connectWallet" class="btn-wallet">
+                    <i class="fas fa-wallet"></i> Connect New Wallet
+                </button>
+            </div>
+        </div>
+    </nav>
+    
+    <div id="status">
+        <p><strong>Status:</strong> <span id="statusText">Ready</span></p>
+        <p><strong>Button State:</strong> <span id="buttonState">Normal</span></p>
+    </div>
+    
+    <div id="messages"></div>
+    <div id="debug"></div>
+
+    <script>
+        function debugLog(message) {
+            const debugDiv = document.getElementById('debug');
+            debugDiv.innerHTML += '<div>' + new Date().toLocaleTimeString() + ': ' + message + '</div>';
+            console.log('DEBUG:', message);
+        }
+        
+        function showMessage(message, type) {
+            const messagesDiv = document.getElementById('messages');
+            const messageEl = document.createElement('div');
+            messageEl.textContent = message;
+            messageEl.className = type;
+            messagesDiv.appendChild(messageEl);
+            
+            setTimeout(() => {
+                if (messageEl.parentNode) {
+                    messageEl.parentNode.removeChild(messageEl);
+                }
+            }, 5000);
+        }
+        
+        function updateButtonState() {
+            const button = document.getElementById('connectWallet');
+            const stateEl = document.getElementById('buttonState');
+            
+            if (button) {
+                const isDisabled = button.disabled;
+                const pointerEvents = window.getComputedStyle(button).pointerEvents;
+                const zIndex = window.getComputedStyle(button).zIndex;
+                const position = window.getComputedStyle(button).position;
+                
+                stateEl.innerHTML = `
+                    Disabled: ${isDisabled}<br>
+                    Pointer Events: ${pointerEvents}<br>
+                    Z-Index: ${zIndex}<br>
+                    Position: ${position}
+                `;
+            }
+        }
+        
+        async function connectWallet() {
+            debugLog('🔗 Connect wallet function called');
+            showMessage('Connect wallet function called!', 'info');
+            
+            const button = document.getElementById('connectWallet');
+            const statusText = document.getElementById('statusText');
+            
+            if (!button) {
+                debugLog('❌ Connect wallet button not found');
+                return;
+            }
+            
+            try {
+                statusText.textContent = 'Connecting...';
+                button.disabled = true;
+                button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connecting...';
+                
+                debugLog('Button disabled and text updated');
+                
+                if (typeof window.ethereum === 'undefined') {
+                    throw new Error('No Web3 wallet found. Please install MetaMask.');
+                }
+                
+                const accounts = await window.ethereum.request({ 
+                    method: 'eth_requestAccounts' 
+                });
+                
+                if (!accounts || accounts.length === 0) {
+                    throw new Error('No accounts found. Please unlock your wallet.');
+                }
+                
+                const walletAddress = accounts[0];
+                debugLog('✅ Wallet connected: ' + walletAddress);
+                
+                statusText.textContent = 'Connected';
+                button.innerHTML = '<i class="fas fa-check"></i> Connected';
+                button.style.background = '#28a745';
+                button.style.color = 'white';
+                
+                showMessage('✅ Wallet connected successfully!', 'success');
+                
+            } catch (error) {
+                debugLog('❌ Wallet connection failed: ' + error.message);
+                statusText.textContent = 'Error';
+                button.disabled = false;
+                button.innerHTML = '<i class="fas fa-wallet"></i> Connect New Wallet';
+                button.style.background = '';
+                button.style.color = '';
+                showMessage('❌ Failed to connect wallet: ' + error.message, 'error');
+            }
+            
+            updateButtonState();
+        }
+        
+        // Test button click detection
+        function testButtonClick() {
+            debugLog('🔘 Test button clicked');
+            showMessage('Test button works!', 'success');
+        }
+        
+        // Setup when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            debugLog('🚀 DOM loaded, setting up event listeners...');
+            
+            const connectBtn = document.getElementById('connectWallet');
+            const testBtn = document.createElement('button');
+            testBtn.textContent = 'Test Button';
+            testBtn.className = 'btn-primary';
+            testBtn.onclick = testButtonClick;
+            document.body.appendChild(testBtn);
+            
+            if (connectBtn) {
+                // Test multiple event listener methods
+                connectBtn.onclick = function(e) {
+                    e.preventDefault();
+                    debugLog('🔗 Connect wallet button clicked (onclick)');
+                    connectWallet();
+                };
+                
+                connectBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    debugLog('🔗 Connect wallet button clicked (addEventListener)');
+                });
+                
+                // Test mouse events
+                connectBtn.addEventListener('mousedown', function(e) {
+                    debugLog('🔗 Connect wallet button mousedown');
+                });
+                
+                connectBtn.addEventListener('mouseup', function(e) {
+                    debugLog('🔗 Connect wallet button mouseup');
+                });
+                
+                debugLog('✅ Connect wallet button listeners added');
+            } else {
+                debugLog('❌ Connect wallet button not found');
+            }
+            
+            // Update button state
+            updateButtonState();
+            
+            // Test if button is clickable
+            debugLog('Button element: ' + (connectBtn ? 'Found' : 'Not found'));
+            if (connectBtn) {
+                debugLog('Button disabled: ' + connectBtn.disabled);
+                debugLog('Button style: ' + connectBtn.style.cssText);
+            }
+            
+            debugLog('✅ Setup complete');
+        });
+        
+        // Catch any errors
+        window.addEventListener('error', function(e) {
+            debugLog('❌ JavaScript error: ' + e.error.message);
+            showMessage('JavaScript error: ' + e.error.message, 'error');
+        });
+    </script>
+</body>
+</html>

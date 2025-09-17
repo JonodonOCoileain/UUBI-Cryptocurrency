@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UUBI Cryptocurrency - Universal Universal Basic Income</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white bg-opacity-10 backdrop-blur-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center">
+                    <h1 class="text-2xl font-bold text-white">
+                        <i class="fas fa-coins mr-2"></i>
+                        UUBI
+                    </h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button id="loginBtn" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition">
+                        <i class="fas fa-sign-in-alt mr-2"></i>
+                        Login
+                    </button>
+                    <button id="registerBtn" class="bg-green-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-700 transition">
+                        <i class="fas fa-user-plus mr-2"></i>
+                        Register
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-8">
+        <!-- Hero Section -->
+        <div class="text-center mb-12">
+            <h1 class="text-5xl font-bold text-white mb-6">
+                Universal Universal Basic Income
+            </h1>
+            <p class="text-xl text-white opacity-90 mb-8 max-w-3xl mx-auto">
+                A revolutionary cryptocurrency that provides guaranteed income to every verified human being through biometric identity verification.
+            </p>
+            <div class="flex justify-center space-x-4">
+                <button id="getStartedBtn" class="bg-white text-purple-600 px-8 py-3 rounded-lg font-medium hover:bg-gray-100 transition">
+                    <i class="fas fa-rocket mr-2"></i>
+                    Get Started
+                </button>
+                <button id="learnMoreBtn" class="bg-transparent border-2 border-white text-white px-8 py-3 rounded-lg font-medium hover:bg-white hover:text-purple-600 transition">
+                    <i class="fas fa-info-circle mr-2"></i>
+                    Learn More
+                </button>
+            </div>
+        </div>
+
+        <!-- Message Container -->
+        <div id="messageContainer" class="mb-8"></div>
+
+        <!-- Auth Forms Container -->
+        <div id="authContainer" class="max-w-md mx-auto hidden">
+            <!-- Login Form -->
+            <div id="loginForm" class="bg-white rounded-lg shadow-lg p-8 mb-8 hidden">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center">
+                    <i class="fas fa-sign-in-alt mr-2"></i>
+                    Login to Your Account
+                </h2>
+                
+                <form id="loginFormElement" class="space-y-4">
+                    <div>
+                        <label for="loginEmail" class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                        <input type="email" id="loginEmail" name="email" required
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                               placeholder="Enter your email">
+                    </div>
+                    
+                    <div>
+                        <label for="loginPassword" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                        <input type="password" id="loginPassword" name="password" required
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                               placeholder="Enter your password">
+                    </div>
+                    
+                    <button type="submit" id="loginSubmitBtn" class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 transition">
+                        <i class="fas fa-sign-in-alt mr-2"></i>
+                        Login
+                    </button>
+                </form>
+                
+                <div class="mt-6 text-center">
+                    <p class="text-sm text-gray-600">
+                        Don't have an account? 
+                        <button type="button" id="switchToRegister" class="text-green-600 hover:text-green-500 font-medium">
+                            Create one here
+                        </button>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Registration Form -->
+            <div id="registerForm" class="bg-white rounded-lg shadow-lg p-8 mb-8 hidden">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center">
+                    <i class="fas fa-user-plus mr-2"></i>
+                    Create Account
+                </h2>
+                
+                <form id="registerFormElement" class="space-y-4">
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                        <input type="email" id="email" name="email" required
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                               placeholder="Enter your email">
+                    </div>
+                    
+                    <div>
+                        <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">Phone Number (Optional)</label>
+                        <input type="tel" id="phone" name="phone"
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                               placeholder="Enter your phone number">
+                    </div>
+                    
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                        <input type="password" id="password" name="password" required
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                               placeholder="Create a password">
+                    </div>
+                    
+                    <div>
+                        <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-2">Confirm Password</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" required
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                               placeholder="Confirm your password">
+                    </div>
+                    
+                    <button type="submit" id="registerSubmitBtn" class="w-full bg-green-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-green-700 transition">
+                        <i class="fas fa-user-plus mr-2"></i>
+                        Create Account
+                    </button>
+                </form>
+                
+                <div class="mt-6 text-center">
+                    <p class="text-sm text-gray-600">
+                        Already have an account? 
+                        <button type="button" id="switchToLogin" class="text-blue-600 hover:text-blue-500 font-medium">
+                            Login here
+                        </button>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+            <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-lg p-6 card-hover">
+                <div class="text-center">
+                    <div class="text-4xl text-white mb-4">
+                        <i class="fas fa-fingerprint"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Biometric Verification</h3>
+                    <p class="text-white opacity-90">Advanced facial recognition and liveness detection ensures each person can only claim UUBI once.</p>
+                </div>
+            </div>
+            
+            <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-lg p-6 card-hover">
+                <div class="text-center">
+                    <div class="text-4xl text-white mb-4">
+                        <i class="fas fa-passport"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Document Verification</h3>
+                    <p class="text-white opacity-90">Passport verification with OCR technology to validate identity documents.</p>
+                </div>
+            </div>
+            
+            <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-lg p-6 card-hover">
+                <div class="text-center">
+                    <div class="text-4xl text-white mb-4">
+                        <i class="fas fa-coins"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Universal Income</h3>
+                    <p class="text-white opacity-90">Receive UUBI tokens based on your age, ensuring fair distribution to all verified humans.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- How It Works -->
+        <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-lg p-8 mb-12">
+            <h2 class="text-3xl font-bold text-white mb-8 text-center">How It Works</h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="text-center">
+                    <div class="bg-white bg-opacity-20 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                        <span class="text-2xl font-bold text-white">1</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Register</h3>
+                    <p class="text-white opacity-90 text-sm">Create your account with email or phone</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="bg-white bg-opacity-20 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                        <span class="text-2xl font-bold text-white">2</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Verify Identity</h3>
+                    <p class="text-white opacity-90 text-sm">Upload passport and record liveness video</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="bg-white bg-opacity-20 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                        <span class="text-2xl font-bold text-white">3</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Get Verified</h3>
+                    <p class="text-white opacity-90 text-sm">Our AI verifies your unique identity</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="bg-white bg-opacity-20 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                        <span class="text-2xl font-bold text-white">4</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Receive UUBI</h3>
+                    <p class="text-white opacity-90 text-sm">Start receiving your universal basic income</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple message display function
+        function showMessage(message, type = 'info') {
+            const container = document.getElementById('messageContainer');
+            if (!container) return;
+            
+            // Clear existing messages
+            container.innerHTML = '';
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `p-4 rounded-lg mb-4 max-w-md mx-auto ${
+                type === 'success' ? 'bg-green-100 text-green-800 border border-green-200' :
+                type === 'error' ? 'bg-red-100 text-red-800 border border-red-200' :
+                type === 'warning' ? 'bg-yellow-100 text-yellow-800 border border-yellow-200' :
+                'bg-blue-100 text-blue-800 border border-blue-200'
+            }`;
+            
+            messageDiv.innerHTML = `
+                <div class="flex items-center">
+                    <span class="mr-2">${type === 'success' ? '✅' : type === 'error' ? '❌' : type === 'warning' ? '⚠️' : 'ℹ️'}</span>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            container.appendChild(messageDiv);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                if (messageDiv.parentElement) {
+                    messageDiv.remove();
+                }
+            }, 5000);
+        }
+
+        // Show form function
+        function showForm(formId) {
+            console.log('showForm called with:', formId);
+            
+            // Hide all forms
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('registerForm').classList.add('hidden');
+            
+            // Show selected form
+            const targetForm = document.getElementById(formId);
+            if (targetForm) {
+                targetForm.classList.remove('hidden');
+                console.log('Form shown:', formId);
+            } else {
+                console.error('Form not found:', formId);
+            }
+            
+            // Show auth container
+            document.getElementById('authContainer').classList.remove('hidden');
+            
+            // Scroll to auth container
+            document.getElementById('authContainer').scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'start' 
+            });
+            
+            showMessage(`Switched to ${formId}`, 'info');
+        }
+
+        // Hide auth container
+        function hideAuth() {
+            document.getElementById('authContainer').classList.add('hidden');
+        }
+
+        // Registration form handler
+        async function handleRegistration(event) {
+            event.preventDefault();
+            
+            const form = event.target;
+            const formData = new FormData(form);
+            const email = formData.get('email');
+            const phone = formData.get('phone');
+            const password = formData.get('password');
+            const confirmPassword = formData.get('confirmPassword');
+            
+            // Basic validation
+            if (!email) {
+                showMessage('Email is required', 'error');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showMessage('Passwords do not match', 'error');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showMessage('Password must be at least 6 characters', 'error');
+                return;
+            }
+            
+            // Show loading state
+            const submitBtn = document.getElementById('registerSubmitBtn');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Creating Account...';
+            submitBtn.disabled = true;
+            
+            try {
+                // Send registration request
+                const response = await fetch('/api/register-email-phone', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        phone: phone || '',
+                        password: password
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showMessage('Account created successfully! You can now login.', 'success');
+                    showForm('loginForm');
+                } else {
+                    showMessage('Registration failed: ' + result.error, 'error');
+                }
+                
+            } catch (error) {
+                console.error('Registration error:', error);
+                showMessage('Registration failed: ' + error.message, 'error');
+            } finally {
+                // Reset button
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        }
+
+        // Login form handler
+        async function handleLogin(event) {
+            event.preventDefault();
+            
+            const form = event.target;
+            const formData = new FormData(form);
+            const email = formData.get('email');
+            const password = formData.get('password');
+            
+            // Basic validation
+            if (!email || !password) {
+                showMessage('Email and password are required', 'error');
+                return;
+            }
+            
+            // Show loading state
+            const submitBtn = document.getElementById('loginSubmitBtn');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Logging in...';
+            submitBtn.disabled = true;
+            
+            try {
+                // Send login request
+                const response = await fetch('/api/login-email-phone', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        password: password
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showMessage('Login successful! Welcome to UUBI.', 'success');
+                    hideAuth();
+                    // Here you would redirect to dashboard or show user interface
+                } else {
+                    showMessage('Login failed: ' + result.error, 'error');
+                }
+                
+            } catch (error) {
+                console.error('Login error:', error);
+                showMessage('Login failed: ' + error.message, 'error');
+            } finally {
+                // Reset button
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Simple Main Page loaded');
+            
+            // Form event listeners
+            document.getElementById('registerFormElement').addEventListener('submit', handleRegistration);
+            document.getElementById('loginFormElement').addEventListener('submit', handleLogin);
+            
+            // Button event listeners - using simple onclick handlers
+            document.getElementById('loginBtn').onclick = function() {
+                console.log('Login button clicked');
+                showForm('loginForm');
+            };
+            
+            document.getElementById('registerBtn').onclick = function() {
+                console.log('Register button clicked');
+                showForm('registerForm');
+            };
+            
+            document.getElementById('getStartedBtn').onclick = function() {
+                console.log('Get started button clicked');
+                showForm('registerForm');
+            };
+            
+            document.getElementById('learnMoreBtn').onclick = function() {
+                showMessage('UUBI is a revolutionary cryptocurrency that provides universal basic income to all verified humans through biometric identity verification.', 'info');
+            };
+            
+            document.getElementById('switchToLogin').onclick = function() {
+                console.log('Switch to login clicked');
+                showForm('loginForm');
+            };
+            
+            document.getElementById('switchToRegister').onclick = function() {
+                console.log('Switch to register clicked');
+                showForm('registerForm');
+            };
+            
+            console.log('✅ Event listeners attached');
+        });
+    </script>
+</body>
+</html>

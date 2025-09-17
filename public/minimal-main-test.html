@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimal Main Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        button { padding: 10px 20px; margin: 10px; font-size: 16px; }
+        .success { color: green; }
+        .error { color: red; }
+        .info { color: blue; }
+    </style>
+</head>
+<body>
+    <h1>Minimal Main Page Test</h1>
+    
+    <div>
+        <button id="connectWallet" class="bg-white text-purple-600 px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition">
+            <i class="fas fa-wallet mr-2"></i>
+            Connect New Wallet
+        </button>
+    </div>
+    
+    <div id="walletAddress">Not connected</div>
+    <div id="network">Unknown</div>
+    <div id="messages"></div>
+
+    <script>
+        // ========================================
+        // CLEAN WALLET CONNECTION - REBUILT FROM SCRATCH
+        // ========================================
+        
+        // Simple wallet connection function
+        async function connectWallet() {
+            console.log('🔗 Starting wallet connection...');
+            
+            const button = document.getElementById('connectWallet');
+            if (!button) {
+                console.error('❌ Connect wallet button not found');
+                return;
+            }
+            
+            try {
+                // Show loading state
+                button.disabled = true;
+                button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Connecting...';
+                
+                // Check if Web3 is available
+                if (typeof window.ethereum === 'undefined') {
+                    throw new Error('MetaMask or other Web3 wallet not detected. Please install MetaMask.');
+                }
+                
+                // Request account access
+                const accounts = await window.ethereum.request({ 
+                    method: 'eth_requestAccounts' 
+                });
+                
+                if (!accounts || accounts.length === 0) {
+                    throw new Error('No accounts found. Please unlock your wallet.');
+                }
+                
+                const walletAddress = accounts[0];
+                console.log('✅ Wallet connected:', walletAddress);
+                
+                // Update UI
+                updateWalletUI(walletAddress, 'connected');
+                
+                // Check registration status
+                await checkWalletStatus(walletAddress);
+                
+            } catch (error) {
+                console.error('❌ Wallet connection failed:', error);
+                resetWalletButton();
+                showMessage('❌ Failed to connect wallet: ' + error.message, 'error');
+            }
+        }
+        
+        // Update wallet UI elements
+        function updateWalletUI(address, status) {
+            const walletAddressElement = document.getElementById('walletAddress');
+            const networkElement = document.getElementById('network');
+            const button = document.getElementById('connectWallet');
+            
+            if (walletAddressElement) {
+                walletAddressElement.textContent = address;
+                walletAddressElement.style.color = '#28a745';
+                walletAddressElement.style.fontWeight = 'bold';
+            }
+            
+            if (networkElement) {
+                networkElement.textContent = 'Connected';
+                networkElement.style.color = '#28a745';
+            }
+            
+            if (button) {
+                if (status === 'connected') {
+                    button.innerHTML = '<i class="fas fa-check mr-2"></i>Connected';
+                    button.classList.remove('bg-white', 'text-purple-600', 'hover:bg-gray-100');
+                    button.classList.add('bg-green-600', 'text-white', 'hover:bg-green-700');
+                } else if (status === 'logged-in') {
+                    button.innerHTML = '<i class="fas fa-sign-in-alt mr-2"></i>Logged In';
+                    button.classList.remove('bg-white', 'text-purple-600', 'hover:bg-gray-100', 'bg-green-600', 'text-white', 'hover:bg-green-700');
+                    button.classList.add('bg-blue-600', 'text-white', 'hover:bg-blue-700');
+                }
+                button.disabled = true;
+            }
+        }
+        
+        // Check if wallet is registered
+        async function checkWalletStatus(walletAddress) {
+            try {
+                console.log('🔍 Checking wallet registration...');
+                
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ walletAddress: walletAddress })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success && result.isRegistered) {
+                    console.log('✅ Wallet is registered - logging in');
+                    updateWalletUI(walletAddress, 'logged-in');
+                    showMessage('✅ Successfully logged in!', 'success');
+                } else {
+                    console.log('ℹ️ Wallet is not registered');
+                    showMessage('✅ Wallet connected! You can now register your identity.', 'success');
+                }
+                
+            } catch (error) {
+                console.error('❌ Error checking wallet status:', error);
+                showMessage('⚠️ Connected but could not verify registration status', 'warning');
+            }
+        }
+        
+        // Reset wallet button to initial state
+        function resetWalletButton() {
+            const button = document.getElementById('connectWallet');
+            if (button) {
+                button.disabled = false;
+                button.innerHTML = '<i class="fas fa-wallet mr-2"></i>Connect New Wallet';
+                button.classList.remove('bg-green-600', 'text-white', 'hover:bg-green-700', 'bg-blue-600', 'text-white', 'hover:bg-blue-700');
+                button.classList.add('bg-white', 'text-purple-600', 'hover:bg-gray-100');
+            }
+        }
+        
+        function showMessage(message, type) {
+            const messagesDiv = document.getElementById('messages');
+            const messageEl = document.createElement('div');
+            messageEl.textContent = message;
+            messageEl.className = type;
+            messagesDiv.appendChild(messageEl);
+            
+            // Remove message after 5 seconds
+            setTimeout(() => {
+                if (messageEl.parentNode) {
+                    messageEl.parentNode.removeChild(messageEl);
+                }
+            }, 5000);
+        }
+        
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Initializing Minimal Test...');
+            
+            // Setup connect wallet button - CLEAN VERSION
+            const connectWalletBtn = document.getElementById('connectWallet');
+            if (connectWalletBtn) {
+                connectWalletBtn.onclick = function(e) {
+                    e.preventDefault();
+                    console.log('🔗 Connect wallet button clicked');
+                    connectWallet();
+                };
+                console.log('✅ Connect wallet button listener added (CLEAN)');
+            } else {
+                console.error('❌ Connect wallet button not found');
+            }
+        });
+    </script>
+</body>
+</html>

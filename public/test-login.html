@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Login Button</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        button { padding: 10px 20px; margin: 10px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .hidden { display: none; }
+        .form { border: 1px solid #ccc; padding: 20px; margin: 20px 0; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Test Login Button</h1>
+    
+    <button id="loginExisting">Login to Existing Account</button>
+    <button id="registerAccount">Register with Email/Phone</button>
+    
+    <div id="emailPhoneLoginSection" class="hidden form">
+        <h3>Login Form</h3>
+        <p>This should appear when you click "Login to Existing Account"</p>
+        <form>
+            <input type="email" placeholder="Email" style="width: 100%; padding: 10px; margin: 10px 0;">
+            <input type="password" placeholder="Password" style="width: 100%; padding: 10px; margin: 10px 0;">
+            <button type="submit">Login</button>
+        </form>
+    </div>
+    
+    <div id="emailPhoneRegistrationSection" class="form">
+        <h3>Registration Form</h3>
+        <p>This should be visible by default</p>
+        <form>
+            <input type="email" placeholder="Email" style="width: 100%; padding: 10px; margin: 10px 0;">
+            <input type="password" placeholder="Password" style="width: 100%; padding: 10px; margin: 10px 0;">
+            <button type="submit">Register</button>
+        </form>
+    </div>
+    
+    <div id="messageContainer"></div>
+    
+    <script>
+        // Show message function
+        function showMessage(message, type = 'info') {
+            const container = document.getElementById('messageContainer');
+            if (!container) return;
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.style.padding = '10px';
+            messageDiv.style.margin = '10px 0';
+            messageDiv.style.borderRadius = '5px';
+            messageDiv.style.backgroundColor = type === 'error' ? '#f8d7da' : type === 'success' ? '#d4edda' : '#d1ecf1';
+            messageDiv.style.color = type === 'error' ? '#721c24' : type === 'success' ? '#155724' : '#0c5460';
+            messageDiv.textContent = message;
+            
+            container.appendChild(messageDiv);
+            
+            setTimeout(() => {
+                if (messageDiv.parentElement) {
+                    messageDiv.remove();
+                }
+            }, 3000);
+        }
+        
+        // Show email/phone login form
+        function showEmailPhoneLogin() {
+            console.log('🔑 Showing email/phone login form...');
+            
+            // Hide other sections
+            document.getElementById('emailPhoneRegistrationSection').classList.add('hidden');
+            document.getElementById('emailPhoneLoginSection').classList.remove('hidden');
+            
+            // Clear forms
+            document.getElementById('emailPhoneLoginForm').reset();
+            
+            // Scroll to login form
+            document.getElementById('emailPhoneLoginSection').scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'start' 
+            });
+            
+            // Focus first input field
+            const firstInput = document.querySelector('#emailPhoneLoginSection input');
+            if (firstInput) {
+                firstInput.focus();
+            }
+            
+            console.log('✅ Login form should now be visible and focused');
+            showMessage('Please enter your login credentials.', 'info');
+        }
+        
+        // Show email/phone registration form
+        function showEmailPhoneRegistration() {
+            console.log('📝 Showing email/phone registration form...');
+            
+            // Hide other sections
+            document.getElementById('emailPhoneLoginSection').classList.add('hidden');
+            document.getElementById('emailPhoneRegistrationSection').classList.remove('hidden');
+            
+            // Clear forms
+            document.getElementById('emailPhoneRegistrationForm').reset();
+            
+            // Scroll to registration form
+            document.getElementById('emailPhoneRegistrationSection').scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'start' 
+            });
+            
+            // Focus first input field
+            const firstInput = document.querySelector('#emailPhoneRegistrationSection input');
+            if (firstInput) {
+                firstInput.focus();
+            }
+            
+            console.log('✅ Registration form should now be visible and focused');
+            showMessage('Please fill out the registration form below.', 'info');
+        }
+        
+        // Wait for DOM to load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Test page loaded');
+            
+            // Setup login existing account button
+            const loginExistingBtn = document.getElementById('loginExisting');
+            if (loginExistingBtn) {
+                loginExistingBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    console.log('🔑 Login existing account button clicked');
+                    showEmailPhoneLogin();
+                });
+                console.log('✅ Login existing account button listener added');
+            } else {
+                console.error('❌ Login existing account button not found');
+            }
+            
+            // Setup register account button
+            const registerAccountBtn = document.getElementById('registerAccount');
+            if (registerAccountBtn) {
+                registerAccountBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    console.log('🔄 Register account button clicked');
+                    showEmailPhoneRegistration();
+                });
+                console.log('✅ Register account button listener added');
+            } else {
+                console.error('❌ Register account button not found');
+            }
+            
+            showMessage('Test page loaded. Click the buttons to test functionality.', 'info');
+        });
+    </script>
+</body>
+</html>

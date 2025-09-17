@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Login Button</title>
+    <style>
+        .hidden { display: none !important; }
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        button { padding: 10px 20px; margin: 10px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .form { border: 1px solid #ccc; padding: 20px; margin: 20px 0; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Test Login Button</h1>
+    
+    <div id="registrationForm" class="form">
+        <h3>Registration Form</h3>
+        <p>This is the registration form</p>
+        <button id="showLoginBtn">Login here</button>
+    </div>
+    
+    <div id="loginForm" class="form hidden">
+        <h3>Login Form</h3>
+        <p>This is the login form</p>
+        <button id="showRegisterBtn">Register here</button>
+    </div>
+    
+    <div id="messageContainer"></div>
+    
+    <script>
+        function showMessage(message) {
+            const container = document.getElementById('messageContainer');
+            container.innerHTML = '<div style="background: #d4edda; color: #155724; padding: 10px; margin: 10px 0; border-radius: 5px;">' + message + '</div>';
+        }
+        
+        function showForm(formId) {
+            console.log('showForm called with:', formId);
+            
+            // Hide all forms
+            document.getElementById('registrationForm').classList.add('hidden');
+            document.getElementById('loginForm').classList.add('hidden');
+            
+            // Show selected form
+            document.getElementById(formId).classList.remove('hidden');
+            
+            showMessage('Switched to ' + formId);
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Page loaded');
+            
+            const loginBtn = document.getElementById('showLoginBtn');
+            const registerBtn = document.getElementById('showRegisterBtn');
+            
+            console.log('Login button found:', !!loginBtn);
+            console.log('Register button found:', !!registerBtn);
+            
+            if (loginBtn) {
+                loginBtn.addEventListener('click', function() {
+                    console.log('Login button clicked');
+                    showForm('loginForm');
+                });
+                console.log('Login button listener added');
+            }
+            
+            if (registerBtn) {
+                registerBtn.addEventListener('click', function() {
+                    console.log('Register button clicked');
+                    showForm('registrationForm');
+                });
+                console.log('Register button listener added');
+            }
+        });
+    </script>
+</body>
+</html>

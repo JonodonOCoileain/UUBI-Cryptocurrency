@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JavaScript Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-result { 
+            background: #f8f9fa; 
+            border: 1px solid #dee2e6; 
+            padding: 15px; 
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .success { background: #d4edda; border-color: #c3e6cb; color: #155724; }
+        .error { background: #f8d7da; border-color: #f5c6cb; color: #721c24; }
+    </style>
+</head>
+<body>
+    <h1>JavaScript Loading Test</h1>
+    
+    <div class="test-result" id="jsTest">
+        Testing JavaScript loading...
+    </div>
+    
+    <div class="test-result" id="appTest">
+        Testing UUBI App initialization...
+    </div>
+    
+    <div class="test-result" id="buttonTest">
+        Testing button functionality...
+    </div>
+    
+    <button type="button" id="testVideoLiveness">Test Video Liveness Detection</button>
+    
+    <script src="app.js"></script>
+    <script>
+        // Test if app.js loaded
+        document.getElementById('jsTest').innerHTML = '✅ app.js loaded successfully';
+        document.getElementById('jsTest').className = 'test-result success';
+        
+        // Test if UUBIApp class exists
+        if (typeof UUBIApp !== 'undefined') {
+            document.getElementById('appTest').innerHTML = '✅ UUBIApp class found';
+            document.getElementById('appTest').className = 'test-result success';
+        } else {
+            document.getElementById('appTest').innerHTML = '❌ UUBIApp class not found';
+            document.getElementById('appTest').className = 'test-result error';
+        }
+        
+        // Test button after a delay
+        setTimeout(function() {
+            const button = document.getElementById('testVideoLiveness');
+            if (button) {
+                document.getElementById('buttonTest').innerHTML = '✅ Button found in DOM';
+                document.getElementById('buttonTest').className = 'test-result success';
+                
+                // Test click
+                button.addEventListener('click', function() {
+                    alert('Button click works!');
+                });
+            } else {
+                document.getElementById('buttonTest').innerHTML = '❌ Button not found in DOM';
+                document.getElementById('buttonTest').className = 'test-result error';
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

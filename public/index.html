@@ -1,0 +1,2821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UUBI Cryptocurrency - Unique & Universal Basic Income</title>
+    <script>
+        // Prevent HTTPS redirects for localhost
+        if (window.location.protocol === 'https:' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
+            window.location.replace('http://localhost:3000' + window.location.pathname + window.location.search + window.location.hash);
+        }
+    </script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .upload-area {
+            border: 2px dashed #cbd5e0;
+            transition: border-color 0.3s ease;
+        }
+        .upload-area:hover {
+            border-color: #667eea;
+        }
+        .upload-area.dragover {
+            border-color: #667eea;
+            background-color: #f7fafc;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="gradient-bg shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <h1 class="text-white text-xl font-bold">
+                            <i class="fas fa-coins mr-2"></i>
+                            UUBI Cryptocurrency
+                        </h1>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button id="loginExisting" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition">
+                        <i class="fas fa-sign-in-alt mr-2"></i>
+                        Login to Existing Account
+                    </button>
+                    <button id="registerAccount" class="bg-green-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-700 transition">
+                        <i class="fas fa-user-plus mr-2"></i>
+                        Register with Email/Phone
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+        <!-- Hero Section -->
+        <div class="text-center mb-12">
+            <h2 class="text-4xl font-bold text-gray-900 mb-4">
+                Unique & Universal Basic Income Cryptocurrency
+            </h2>
+            <p class="text-xl text-gray-600 mb-8">
+                Secure, biometric-verified UUBI distribution with passport-based identity verification
+            </p>
+            <div class="flex justify-center space-x-4">
+                <div class="bg-green-100 text-green-800 px-4 py-2 rounded-full">
+                    <i class="fas fa-shield-alt mr-2"></i>
+                    Biometric Security
+                </div>
+                <div class="bg-blue-100 text-blue-800 px-4 py-2 rounded-full">
+                    <i class="fas fa-passport mr-2"></i>
+                    Passport Verification
+                </div>
+                <div class="bg-red-100 text-red-800 px-4 py-2 rounded-full">
+                    <i class="fas fa-heartbeat mr-2"></i>
+                    Liveness Detection
+                </div>
+                <div class="bg-purple-100 text-purple-800 px-4 py-2 rounded-full">
+                    <i class="fas fa-unique mr-2"></i>
+                    Unique Identity
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Status Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
+            <div class="bg-white rounded-lg shadow-md p-6 card-hover">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-user-check text-3xl text-green-500"></i>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-lg font-medium text-gray-900">Identity Status</h3>
+                        <p id="identityStatus" class="text-sm text-gray-500">Not verified</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-md p-6 card-hover">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-heartbeat text-3xl text-red-500"></i>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-lg font-medium text-gray-900">Liveness Check</h3>
+                        <p id="livenessStatus" class="text-sm text-gray-500">Not checked</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-md p-6 card-hover">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-coins text-3xl text-yellow-500"></i>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-lg font-medium text-gray-900">UUBI Balance</h3>
+                        <p id="ubiBalance" class="text-sm text-gray-500">0 UUBI</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-md p-6 card-hover">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-clock text-3xl text-blue-500"></i>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-lg font-medium text-gray-900">Next Claim</h3>
+                        <p id="nextClaim" class="text-sm text-gray-500">Not available</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-6 card-hover">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-birthday-cake text-3xl text-pink-500"></i>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-lg font-medium text-gray-900">Birthday</h3>
+                        <p id="birthdayDisplay" class="text-sm text-gray-500">Not extracted</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Email/Phone Registration Section -->
+        <div id="emailPhoneRegistrationSection" class="bg-white rounded-lg shadow-lg p-6 mb-8" style="display: block;">
+            <h3 class="text-2xl font-bold text-gray-900 mb-6">
+                <i class="fas fa-user-plus mr-2"></i>
+                Create Account with Email or Phone
+            </h3>
+            <p class="text-gray-600 mb-6">
+                Register with your email address or phone number to create a secure UUBI account.
+            </p>
+            
+            <form id="emailPhoneRegistrationForm" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="regEmail" class="block text-sm font-medium text-gray-700 mb-2">
+                            Email Address
+                        </label>
+                        <input type="email" id="regEmail" name="email" 
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                               placeholder="Enter your email address">
+                    </div>
+                    <div>
+                        <label for="regPhone" class="block text-sm font-medium text-gray-700 mb-2">
+                            Phone Number
+                        </label>
+                        <input type="tel" id="regPhone" name="phone" 
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                               placeholder="Enter your phone number">
+                    </div>
+                </div>
+                
+                <div class="text-sm text-gray-500 mb-4">
+                    <i class="fas fa-info-circle mr-1"></i>
+                    You can register with either email or phone (or both). At least one is required.
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="regPassword" class="block text-sm font-medium text-gray-700 mb-2">
+                            Password
+                        </label>
+                        <input type="password" id="regPassword" name="password" 
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                               placeholder="Create a strong password">
+                    </div>
+                    <div>
+                        <label for="regConfirmPassword" class="block text-sm font-medium text-gray-700 mb-2">
+                            Confirm Password
+                        </label>
+                        <input type="password" id="regConfirmPassword" name="confirmPassword" 
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                               placeholder="Confirm your password">
+                    </div>
+                </div>
+                
+                <div class="text-sm text-gray-500 mb-4">
+                    <i class="fas fa-shield-alt mr-1"></i>
+                    Password must be at least 8 characters with uppercase, lowercase, and number.
+                </div>
+                
+                <button type="submit" id="submitEmailPhoneRegistration" 
+                        class="w-full bg-green-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-green-700 transition">
+                    <i class="fas fa-user-plus mr-2"></i>
+                    Create Account
+                </button>
+            </form>
+            
+            <div class="mt-6 text-center">
+                <p class="text-sm text-gray-600">
+                    Already have an account? 
+                    <button id="showLoginForm" class="text-blue-600 hover:text-blue-800 font-medium">
+                        Login here
+                    </button>
+                </p>
+            </div>
+        </div>
+
+        <!-- Email/Phone Login Section -->
+        <div id="emailPhoneLoginSection" class="bg-white rounded-lg shadow-lg p-6 mb-8" style="display: none;">
+            <h3 class="text-2xl font-bold text-gray-900 mb-6">
+                <i class="fas fa-sign-in-alt mr-2"></i>
+                Login to Your Account
+            </h3>
+            <p class="text-gray-600 mb-6">
+                Login with your email address or phone number.
+            </p>
+            
+            <form id="emailPhoneLoginForm" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="loginEmail" class="block text-sm font-medium text-gray-700 mb-2">
+                            Email Address
+                        </label>
+                        <input type="email" id="loginEmail" name="email" 
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                               placeholder="Enter your email address">
+                    </div>
+                    <div>
+                        <label for="loginPhone" class="block text-sm font-medium text-gray-700 mb-2">
+                            Phone Number
+                        </label>
+                        <input type="tel" id="loginPhone" name="phone" 
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                               placeholder="Enter your phone number">
+                    </div>
+                </div>
+                
+                <div class="text-sm text-gray-500 mb-4">
+                    <i class="fas fa-info-circle mr-1"></i>
+                    Enter either email or phone (whichever you used to register).
+                </div>
+                
+                <div>
+                    <label for="loginPassword" class="block text-sm font-medium text-gray-700 mb-2">
+                        Password
+                    </label>
+                    <input type="password" id="loginPassword" name="password" 
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                           placeholder="Enter your password">
+                </div>
+                
+                <button type="submit" id="submitEmailPhoneLogin" 
+                        class="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 transition">
+                    <i class="fas fa-sign-in-alt mr-2"></i>
+                    Login
+                </button>
+            </form>
+            
+            <div class="mt-4 text-center">
+                <button id="showForgotPassword" class="text-sm text-blue-600 hover:text-blue-800 font-medium">
+                    <i class="fas fa-key mr-1"></i>
+                    Forgot your password?
+                </button>
+            </div>
+            
+            <div class="mt-6 text-center">
+                <p class="text-sm text-gray-600">
+                    Don't have an account? 
+                    <button id="showRegistrationForm" class="text-green-600 hover:text-green-800 font-medium">
+                        Register here
+                    </button>
+                </p>
+            </div>
+        </div>
+
+        <!-- Password Reset Request Section -->
+        <div id="passwordResetRequestSection" class="hidden bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h3 class="text-2xl font-bold text-gray-900 mb-6">
+                <i class="fas fa-key mr-2"></i>
+                Reset Your Password
+            </h3>
+            <p class="text-gray-600 mb-6">
+                Enter your email address and we'll send you a link to reset your password.
+            </p>
+            
+            <form id="passwordResetRequestForm" class="space-y-4">
+                <div>
+                    <label for="resetEmail" class="block text-sm font-medium text-gray-700 mb-2">
+                        Email Address
+                    </label>
+                    <input type="email" id="resetEmail" name="email" 
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                           placeholder="Enter your email address" required>
+                </div>
+                
+                <button type="submit" id="submitPasswordResetRequest" 
+                        class="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 transition">
+                    <i class="fas fa-paper-plane mr-2"></i>
+                    Send Reset Link
+                </button>
+            </form>
+            
+            <div class="mt-6 text-center">
+                <p class="text-sm text-gray-600">
+                    Remember your password? 
+                    <button id="showLoginFormFromReset" class="text-blue-600 hover:text-blue-800 font-medium">
+                        Login here
+                    </button>
+                </p>
+            </div>
+        </div>
+
+        <!-- Password Reset Form Section -->
+        <div id="passwordResetFormSection" class="hidden bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h3 class="text-2xl font-bold text-gray-900 mb-6">
+                <i class="fas fa-lock mr-2"></i>
+                Set New Password
+            </h3>
+            <p class="text-gray-600 mb-6">
+                Enter your new password below.
+            </p>
+            
+            <form id="passwordResetForm" class="space-y-4">
+                <input type="hidden" id="resetToken" name="token">
+                
+                <div>
+                    <label for="newPassword" class="block text-sm font-medium text-gray-700 mb-2">
+                        New Password
+                    </label>
+                    <input type="password" id="newPassword" name="newPassword" 
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                           placeholder="Enter your new password" required>
+                </div>
+                
+                <div>
+                    <label for="confirmNewPassword" class="block text-sm font-medium text-gray-700 mb-2">
+                        Confirm New Password
+                    </label>
+                    <input type="password" id="confirmNewPassword" name="confirmPassword" 
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                           placeholder="Confirm your new password" required>
+                </div>
+                
+                <div class="text-sm text-gray-500 mb-4">
+                    <i class="fas fa-shield-alt mr-1"></i>
+                    Password must be at least 8 characters with uppercase, lowercase, and number.
+                </div>
+                
+                <button type="submit" id="submitPasswordReset" 
+                        class="w-full bg-green-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-green-700 transition">
+                    <i class="fas fa-check mr-2"></i>
+                    Reset Password
+                </button>
+            </form>
+            
+            <div class="mt-6 text-center">
+                <p class="text-sm text-gray-600">
+                    Remember your password? 
+                    <button id="showLoginFormFromResetForm" class="text-blue-600 hover:text-blue-800 font-medium">
+                        Login here
+                    </button>
+                </p>
+            </div>
+        </div>
+
+        <!-- Main Actions -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Identity Registration -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h3 class="text-2xl font-bold text-gray-900 mb-6">
+                    <i class="fas fa-passport mr-2"></i>
+                    Register Identity with Passport
+                </h3>
+                
+                <p class="text-gray-600 mb-6">
+                    Upload your valid passport and provide biometric verification to register for UUBI. Only non-expired passports are accepted.
+                </p>
+                
+                <form id="identityForm" enctype="multipart/form-data">
+                    <div class="space-y-6">
+                        <!-- Document Type Selection -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Document Type
+                            </label>
+                            <select id="documentType" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500" disabled>
+                                <option value="passport" selected>Passport (Required)</option>
+                            </select>
+                            <p class="text-sm text-gray-500 mt-1">
+                                <i class="fas fa-passport mr-1"></i>
+                                Only valid, non-expired passports are accepted as identity documents
+                            </p>
+                        </div>
+
+                        <!-- Note: Biometric image removed - using video frame extraction instead -->
+
+                        <!-- Enhanced Video Liveness Check -->
+                        <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6 border border-blue-200">
+                            <div class="flex items-center mb-4">
+                                <i class="fas fa-video text-2xl text-blue-600 mr-3"></i>
+                                <h3 class="text-lg font-semibold text-gray-900">Enhanced Liveness Verification</h3>
+                                <span class="ml-2 bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded">REQUIRED</span>
+                            </div>
+                        <p class="text-sm text-gray-600 mb-4">
+                            <strong class="text-red-600">REQUIRED:</strong> Record a short video (3-5 seconds) for mandatory liveness detection and face scanning. This video will be used to verify you are a real person, prevent spoofing attacks, and extract your biometric data for identity verification.
+                        </p>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    Liveness Video <span class="text-red-500 font-bold">*REQUIRED*</span>
+                                </label>
+                                <div id="videoUpload" class="upload-area rounded-lg p-6 text-center cursor-pointer hover:bg-blue-50 transition-colors border-2 border-dashed border-blue-300">
+                                    <i class="fas fa-video text-3xl text-blue-400 mb-3"></i>
+                                    <p class="text-blue-600 mb-1">Click to record or upload video</p>
+                                    <p class="text-xs text-blue-500">MP4, MOV up to 50MB</p>
+                                    <input type="file" id="livenessVideo" name="livenessVideo" accept="video/*" class="hidden">
+                                </div>
+                                <div id="videoResult" class="mt-2 text-sm text-gray-600">No file selected</div>
+                                <div id="videoPreview" class="mt-4 hidden">
+                                    <video id="videoPreviewPlayer" class="w-64 h-48 object-cover rounded-lg mx-auto border-2 border-blue-200" controls>
+                                        <source id="videoSource" src="" type="video/mp4">
+                                        Your browser does not support the video tag.
+                                    </video>
+                                    <p class="text-sm text-blue-600 text-center mt-2">✓ Liveness video uploaded</p>
+                                </div>
+                            </div>
+
+                            <div class="mt-4 p-4 bg-blue-50 rounded-lg">
+                                <h4 class="text-sm font-medium text-blue-900 mb-2">Video Analysis Features:</h4>
+                                <ul class="text-xs text-blue-700 space-y-1">
+                                    <li>• Facial movement analysis</li>
+                                    <li>• Eye blinking patterns</li>
+                                    <li>• Mouth movement detection</li>
+                                    <li>• Head movement tracking</li>
+                                    <li>• Micro-expression analysis</li>
+                                    <li>• Temporal consistency checks</li>
+                                </ul>
+            <button type="button" id="testVideoLiveness" class="mt-3 w-full bg-blue-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-700 transition text-sm">
+                <i class="fas fa-play mr-2"></i>
+                Test Video Liveness Detection
+            </button>
+            <div id="testVideoResult" class="mt-3 p-3 rounded-lg hidden"></div>
+                            </div>
+                        </div>
+
+                        <!-- Document Image Upload -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                <i class="fas fa-passport mr-2"></i>
+                                Passport Document
+                            </label>
+                            <div id="documentUpload" class="upload-area rounded-lg p-8 text-center cursor-pointer hover:bg-gray-50 transition-colors">
+                                <i class="fas fa-passport text-4xl text-gray-400 mb-4"></i>
+                                <p class="text-gray-600 mb-2">Click to upload passport or drag and drop</p>
+                                <p class="text-sm text-gray-500">PNG, JPG up to 10MB - Valid passport only</p>
+                                <input type="file" id="documentImage" name="documentImage" accept="image/*" class="hidden">
+                            </div>
+                            <div id="documentResult" class="mt-2 text-sm text-gray-600">No file selected</div>
+                            <div id="documentPreview" class="mt-4 hidden">
+                                <img id="documentPreviewImg" class="w-32 h-32 object-cover rounded-lg mx-auto border-2 border-gray-200">
+                                <p class="text-sm text-green-600 text-center mt-2">✓ Document image uploaded</p>
+                            </div>
+                        </div>
+                        
+
+                        <!-- Submit Button -->
+                        <button type="button" id="registerButton" class="w-full bg-purple-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-purple-700 transition disabled:opacity-50 disabled:cursor-not-allowed">
+                            <i class="fas fa-user-plus mr-2"></i>
+                            Register Identity
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- UUBI Management -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h3 class="text-2xl font-bold text-gray-900 mb-6">
+                    <i class="fas fa-coins mr-2"></i>
+                    UUBI Management
+                </h3>
+                
+                <div class="space-y-6">
+                    <!-- Claim UUBI -->
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <h4 class="text-lg font-medium text-gray-900 mb-2">Claim UUBI Tokens</h4>
+                        <p class="text-sm text-gray-600 mb-4">
+                            Claim your daily UUBI allocation. You can claim once every 24 hours.
+                        </p>
+                        <button id="claimUUBI" class="w-full bg-green-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-green-700 transition disabled:opacity-50 disabled:cursor-not-allowed">
+                            <i class="fas fa-download mr-2"></i>
+                            Claim UUBI
+                        </button>
+                    </div>
+
+                    <!-- Claim Backdated UUBI -->
+                    <div class="bg-blue-50 rounded-lg p-4">
+                        <h4 class="text-lg font-medium text-gray-900 mb-2">Claim Backdated UUBI</h4>
+                        <p class="text-sm text-gray-600 mb-4">
+                            Claim UUBI tokens for every day you've been alive since birth using your extracted birthday from identity registration. This is a one-time claim.
+                        </p>
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Date of Birth
+                            </label>
+                            <input type="date" id="dateOfBirth" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-100" disabled readonly>
+                        </div>
+                        <button id="claimBackdatedUUBI" class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                            <i class="fas fa-history mr-2"></i>
+                            Claim Backdated UUBI
+                        </button>
+                    </div>
+
+                    <!-- Wallet Information -->
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <h4 class="text-lg font-medium text-gray-900">Wallet Information</h4>
+                            <button id="logoutBtn" class="bg-red-600 text-white px-3 py-1 rounded text-sm hover:bg-red-700 transition hidden">
+                                <i class="fas fa-sign-out-alt mr-1"></i>
+                                Logout
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Transaction History -->
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <h4 class="text-lg font-medium text-gray-900 mb-2">Recent Transactions</h4>
+                        <div id="transactionHistory" class="text-sm text-gray-600">
+                            No transactions yet
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- UUBI Mining Section (Only visible when logged in) -->
+        <div id="miningSection" class="mt-8 bg-white rounded-lg shadow-lg p-6 hidden">
+            <h3 class="text-2xl font-bold text-gray-900 mb-6">
+                <i class="fas fa-hammer mr-2"></i>
+                UUBI Real Mining
+            </h3>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Mining Controls -->
+                <div>
+                    <h4 class="text-lg font-semibold text-gray-900 mb-4">Mining Controls</h4>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label for="minerAddressInput" class="block text-sm font-medium text-gray-700 mb-2">Miner Address</label>
+                            <input type="text" id="minerAddressInput" 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                                   placeholder="Enter your miner address" value="">
+                        </div>
+                        
+                        <div class="flex space-x-4">
+                            <button id="startMiningBtn" class="bg-green-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-green-700 transition">
+                                <i class="fas fa-play mr-2"></i>
+                                Start Mining
+                            </button>
+                            <button id="stopMiningBtn" class="bg-red-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-red-700 transition" disabled>
+                                <i class="fas fa-stop mr-2"></i>
+                                Stop Mining
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Mining Stats -->
+                <div>
+                    <h4 class="text-lg font-semibold text-gray-900 mb-4">Mining Statistics</h4>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-gray-50 rounded-lg p-4 text-center">
+                            <div class="text-2xl font-bold text-green-600" id="miningBalance">0 UUBI</div>
+                            <div class="text-sm text-gray-600">Your Balance</div>
+                        </div>
+                        <div class="bg-gray-50 rounded-lg p-4 text-center">
+                            <div class="text-2xl font-bold text-blue-600" id="miningUbiPool">0 UUBI</div>
+                            <div class="text-sm text-gray-600">UBI Pool</div>
+                        </div>
+                        <div class="bg-gray-50 rounded-lg p-4 text-center">
+                            <div class="text-2xl font-bold text-purple-600" id="miningHashrate">0 H/s</div>
+                            <div class="text-sm text-gray-600">Hashrate</div>
+                        </div>
+                        <div class="bg-gray-50 rounded-lg p-4 text-center">
+                            <div class="text-2xl font-bold text-orange-600" id="miningDifficulty">4</div>
+                            <div class="text-sm text-gray-600">Difficulty</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Mining Status (Always visible when mining) -->
+            <div id="miningStatus" class="mt-6 hidden">
+                <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <div class="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                            </div>
+                            <div class="ml-3">
+                                <h4 class="text-lg font-semibold text-green-800">Background Mining Active</h4>
+                                <p class="text-sm text-green-600">Mining continues even when browser is hidden...</p>
+                                <p class="text-xs text-green-500 mt-1">
+                                    <i class="fas fa-eye-slash mr-1"></i>
+                                    Works in background tabs and minimized windows
+                                </p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-2xl font-bold text-green-800" id="blocksMinedCount">0</div>
+                            <div class="text-xs text-green-600">Blocks Mined</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Mining Progress (Hidden by default) -->
+            <div id="miningProgress" class="mt-6 hidden">
+                <h4 class="text-lg font-semibold text-gray-900 mb-4">Current Block Progress</h4>
+                
+                <div class="mb-4">
+                    <div class="flex justify-between text-sm text-gray-600 mb-2">
+                        <span>Progress</span>
+                        <span id="miningProgressText">0%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-4">
+                        <div id="miningProgressBar" class="bg-green-600 h-4 rounded-full" style="width: 0%"></div>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                    <div>
+                        <p class="text-sm text-gray-600">Hashes Computed</p>
+                        <p id="miningHashCount" class="text-lg font-bold text-blue-600">0</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600">Current Nonce</p>
+                        <p id="miningCurrentNonce" class="text-lg font-bold text-purple-600">0</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600">Elapsed Time</p>
+                        <p id="miningElapsedTime" class="text-lg font-bold text-orange-600">0s</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Mining Results (Hidden by default) -->
+            <div id="miningResults" class="mt-6 hidden">
+                <h4 class="text-lg font-semibold text-gray-900 mb-4">
+                    <i class="fas fa-trophy mr-2"></i>
+                    Block Mined!
+                </h4>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h5 class="font-semibold text-gray-700 mb-2">Block Details</h5>
+                        <div class="space-y-2 text-sm">
+                            <p><span class="font-medium">Hash:</span> <span id="miningBlockHash" class="font-mono text-xs">00000000000000000000</span></p>
+                            <p><span class="font-medium">Nonce:</span> <span id="miningBlockNonce">0</span></p>
+                            <p><span class="font-medium">Mining Time:</span> <span id="miningBlockTime">0s</span></p>
+                            <p><span class="font-medium">Difficulty:</span> <span id="miningBlockDifficulty">4</span></p>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h5 class="font-semibold text-gray-700 mb-2">Rewards</h5>
+                        <div class="space-y-2 text-sm">
+                            <p><span class="font-medium">Total Mined:</span> <span id="miningTotalReward" class="text-green-600 font-bold">0 UUBI</span></p>
+                            <p><span class="font-medium">Your Share:</span> <span id="miningMinerReward" class="text-blue-600 font-bold">0 UUBI</span></p>
+                            <p><span class="font-medium">UBI Pool:</span> <span id="miningUbiReward" class="text-purple-600 font-bold">0 UUBI</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Mining History -->
+            <div class="mt-6">
+                <h4 class="text-lg font-semibold text-gray-900 mb-4">Recent Mining History</h4>
+                <div id="miningHistory" class="space-y-2 max-h-48 overflow-y-auto">
+                    <p class="text-gray-500 text-center py-4">No mining history yet</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Information -->
+        <div class="mt-12 bg-white rounded-lg shadow-lg p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-gray-900">
+                    <i class="fas fa-info-circle mr-2"></i>
+                    System Information
+                </h3>
+                <button onclick="loadSystemStats()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm">
+                    <i class="fas fa-refresh mr-2"></i>
+                    Refresh
+                </button>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-purple-600" id="totalSupply">0</div>
+                    <div class="text-sm text-gray-600">Total Supply</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-green-600" id="verifiedUsers">0</div>
+                    <div class="text-sm text-gray-600">Verified Users</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-blue-600" id="dailyDistribution">1000</div>
+                    <div class="text-sm text-gray-600">Daily Distribution</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-yellow-600" id="contractAddress">-</div>
+                    <div class="text-sm text-gray-600">Contract Address</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Modal -->
+    <div id="loadingModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-lg p-6 max-w-sm w-full mx-4">
+            <div class="flex items-center">
+                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600 mr-4"></div>
+                <div>
+                    <h3 class="text-lg font-medium text-gray-900">Processing</h3>
+                    <p id="loadingText" class="text-sm text-gray-600">Please wait...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success/Error Messages -->
+    <div id="messageContainer" class="fixed top-4 right-4 z-50"></div>
+
+    <!-- Clean Upload JavaScript -->
+    <script>
+        
+        
+        
+        
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Initializing UUBI App...');
+            
+            
+            // Prevent form submission
+            const form = document.querySelector('form');
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    handleRegistration();
+                });
+            }
+            
+            
+            // Setup login existing account button
+            const loginExistingBtn = document.getElementById('loginExisting');
+            if (loginExistingBtn) {
+                loginExistingBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    console.log('🔑 Login existing account button clicked');
+                    console.log('🔍 About to call showEmailPhoneLogin()');
+                    try {
+                        showEmailPhoneLogin();
+                        console.log('✅ showEmailPhoneLogin() called successfully');
+                    } catch (error) {
+                        console.error('❌ Error calling showEmailPhoneLogin():', error);
+                    }
+                });
+                console.log('✅ Login existing account button listener added');
+            } else {
+                console.error('❌ Login existing account button not found');
+            }
+            
+            // Setup register account button
+            const registerAccountBtn = document.getElementById('registerAccount');
+            if (registerAccountBtn) {
+                registerAccountBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    console.log('🔄 Register account button clicked');
+                    showEmailPhoneRegistration();
+                });
+                console.log('✅ Register account button listener added');
+            } else {
+                console.error('❌ Register account button not found');
+            }
+            
+            // Setup email/phone registration form
+            const emailPhoneRegistrationForm = document.getElementById('emailPhoneRegistrationForm');
+            if (emailPhoneRegistrationForm) {
+                emailPhoneRegistrationForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    handleEmailPhoneRegistration();
+                });
+                console.log('✅ Email/phone registration form listener added');
+            }
+            
+            // Setup email/phone login form
+            const emailPhoneLoginForm = document.getElementById('emailPhoneLoginForm');
+            if (emailPhoneLoginForm) {
+                emailPhoneLoginForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    handleEmailPhoneLogin();
+                });
+                console.log('✅ Email/phone login form listener added');
+            }
+            
+            // Setup show login/registration form buttons - SIMPLE VERSION
+            const showLoginFormBtn = document.getElementById('showLoginForm');
+            if (showLoginFormBtn) {
+                showLoginFormBtn.onclick = function(e) {
+                    e.preventDefault();
+                    console.log('Login button clicked - SIMPLE VERSION');
+                    // Simple form switching
+                    document.getElementById('emailPhoneRegistrationSection').style.display = 'none';
+                    document.getElementById('emailPhoneLoginSection').style.display = 'block';
+                    showMessage('Switched to login form', 'info');
+                };
+                console.log('✅ Login button listener added (SIMPLE)');
+            } else {
+                console.error('❌ Login button not found');
+            }
+            
+            const showRegistrationFormBtn = document.getElementById('showRegistrationForm');
+            if (showRegistrationFormBtn) {
+                showRegistrationFormBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    showEmailPhoneRegistration();
+                });
+            }
+            
+            // Setup password reset buttons
+            const showForgotPasswordBtn = document.getElementById('showForgotPassword');
+            if (showForgotPasswordBtn) {
+                showForgotPasswordBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    showPasswordResetRequest();
+                });
+            }
+            
+            const showLoginFormFromResetBtn = document.getElementById('showLoginFormFromReset');
+            if (showLoginFormFromResetBtn) {
+                showLoginFormFromResetBtn.onclick = function(e) {
+                    e.preventDefault();
+                    console.log('Login from reset button clicked - SIMPLE VERSION');
+                    // Simple form switching
+                    document.getElementById('passwordResetRequestSection').style.display = 'none';
+                    document.getElementById('emailPhoneLoginSection').style.display = 'block';
+                    showMessage('Switched to login form', 'info');
+                };
+                console.log('✅ Login from reset button listener added (SIMPLE)');
+            }
+            
+            const showLoginFormFromResetFormBtn = document.getElementById('showLoginFormFromResetForm');
+            if (showLoginFormFromResetFormBtn) {
+                showLoginFormFromResetFormBtn.onclick = function(e) {
+                    e.preventDefault();
+                    console.log('Login from reset form button clicked - SIMPLE VERSION');
+                    // Simple form switching
+                    document.getElementById('passwordResetFormSection').style.display = 'none';
+                    document.getElementById('emailPhoneLoginSection').style.display = 'block';
+                    showMessage('Switched to login form', 'info');
+                };
+                console.log('✅ Login from reset form button listener added (SIMPLE)');
+            }
+            
+            // Setup password reset forms
+            const passwordResetRequestForm = document.getElementById('passwordResetRequestForm');
+            if (passwordResetRequestForm) {
+                passwordResetRequestForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    handlePasswordResetRequest();
+                });
+            }
+            
+            const passwordResetForm = document.getElementById('passwordResetForm');
+            if (passwordResetForm) {
+                passwordResetForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    handlePasswordReset();
+                });
+            }
+            // Biometric image upload removed - using video frame extraction instead
+            
+            // Setup video upload
+            const videoUpload = document.getElementById('videoUpload');
+            const videoInput = document.getElementById('livenessVideo');
+            const videoResult = document.getElementById('videoResult');
+            
+            if (videoUpload && videoInput && videoResult) {
+                videoUpload.addEventListener('click', function() {
+                    videoInput.click();
+                });
+                
+                videoInput.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const size = (file.size / 1024 / 1024).toFixed(2);
+                        videoResult.innerHTML = `✅ Selected: ${file.name} (${size} MB) - REQUIRED`;
+                        videoResult.style.color = '#28a745';
+                    } else {
+                        videoResult.innerHTML = 'No file selected - REQUIRED';
+                        videoResult.style.color = '#dc3545';
+                    }
+                });
+            }
+            
+            // Setup document upload
+            const documentUpload = document.getElementById('documentUpload');
+            const documentInput = document.getElementById('documentImage');
+            const documentResult = document.getElementById('documentResult');
+            
+            if (documentUpload && documentInput && documentResult) {
+                documentUpload.addEventListener('click', function() {
+                    documentInput.click();
+                });
+                
+                documentInput.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const size = (file.size / 1024).toFixed(1);
+                        documentResult.innerHTML = `✅ Selected: ${file.name} (${size} KB)`;
+                        documentResult.style.color = '#28a745';
+                    } else {
+                        documentResult.innerHTML = 'No file selected';
+                        documentResult.style.color = '#6c757d';
+                    }
+                });
+            }
+            
+            // Setup register button
+            const registerButton = document.getElementById('registerButton');
+            if (registerButton) {
+                registerButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    handleRegistration();
+                });
+            }
+            
+            // Setup test video liveness button
+            const testVideoButton = document.getElementById('testVideoLiveness');
+            if (testVideoButton) {
+                testVideoButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    testVideoLiveness();
+                });
+            }
+            
+            // Setup backdated UUBI claim button
+            const claimBackdatedButton = document.getElementById('claimBackdatedUUBI');
+            if (claimBackdatedButton) {
+                claimBackdatedButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    claimBackdatedUUBI();
+                });
+            }
+            
+            // Setup logout button
+            const logoutBtn = document.getElementById('logoutBtn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    logout();
+                });
+                console.log('✅ Logout button listener added');
+            } else {
+                console.error('❌ Logout button not found');
+            }
+        });
+        
+        // Handle registration without page reload
+        async function handleRegistration() {
+            const videoFile = document.getElementById('livenessVideo').files[0];
+            const documentFile = document.getElementById('documentImage').files[0];
+            const documentType = document.getElementById('documentType').value;
+            
+            // Validation
+            if (!videoFile) {
+                showMessage('Liveness video is REQUIRED for identity verification', 'error');
+                return;
+            }
+            
+            if (!documentFile) {
+                showMessage('Document image is REQUIRED for identity verification', 'error');
+                return;
+            }
+            
+            try {
+                // Show loading state
+                const button = document.getElementById('registerButton');
+                button.disabled = true;
+                button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Processing Document...';
+                
+                // Step 1: Extract birthday from document
+                showMessage('📄 Extracting birthday from identity document...', 'info');
+                const birthdayResult = await extractBirthdayFromDocument(documentFile, documentType);
+                
+                if (!birthdayResult.success) {
+                    throw new Error('Failed to extract birthday: ' + birthdayResult.error);
+                }
+                
+                // Step 2: Process biometric data
+                button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Processing Biometric Data...';
+                showMessage('👤 Processing biometric data and liveness detection...', 'info');
+                
+                // Create form data
+                const formData = new FormData();
+                formData.append('livenessVideo', videoFile);
+                formData.append('documentImage', documentFile);
+                formData.append('documentType', documentType);
+                formData.append('extractedBirthday', birthdayResult.birthday);
+                
+                // Step 3: Submit to server
+                button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Registering Identity...';
+                showMessage('🚀 Submitting registration to blockchain...', 'info');
+                
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                // Reset button
+                button.disabled = false;
+                button.innerHTML = '<i class="fas fa-user-plus mr-2"></i>Register Identity';
+                
+                if (result.success) {
+                    showMessage('✅ Identity registered successfully! Birthday: ' + birthdayResult.birthday, 'success');
+                    // Update UI to show success state
+                    updateRegistrationSuccess(birthdayResult.birthday, result.data.walletAddress);
+                } else {
+                    showMessage('❌ Registration failed: ' + result.error, 'error');
+                }
+                
+            } catch (error) {
+                // Reset button
+                const button = document.getElementById('registerButton');
+                button.disabled = false;
+                button.innerHTML = '<i class="fas fa-user-plus mr-2"></i>Register Identity';
+                
+                showMessage('Registration failed: ' + error.message, 'error');
+                console.error('Registration error:', error);
+            }
+        }
+        
+        // Test video liveness detection (simple version)
+        async function testVideoLiveness() {
+            const videoFile = document.getElementById('livenessVideo').files[0];
+            const testResult = document.getElementById('testVideoResult');
+            const button = document.getElementById('testVideoLiveness');
+            
+            // Check if video is selected
+            if (!videoFile) {
+                showTestResult('Please select a video file first', 'error');
+                return;
+            }
+            
+            try {
+                // Show loading state
+                button.disabled = true;
+                button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Testing...';
+                showTestResult('Testing video liveness detection...', 'info');
+                
+                // Create form data
+                const formData = new FormData();
+                formData.append('video', videoFile);
+                
+                // Call test endpoint
+                const response = await fetch('/api/test-video-liveness', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                // Reset button
+                button.disabled = false;
+                button.innerHTML = '<i class="fas fa-play mr-2"></i>Test Video Liveness Detection';
+                
+                // Show result
+                if (result.success) {
+                    showTestResult('✅ Video liveness test passed! Video is valid for biometric processing.', 'success');
+                } else {
+                    showTestResult('❌ Video liveness test failed: ' + (result.error || 'Unknown error'), 'error');
+                }
+                
+            } catch (error) {
+                // Reset button
+                button.disabled = false;
+                button.innerHTML = '<i class="fas fa-play mr-2"></i>Test Video Liveness Detection';
+                
+                showTestResult('❌ Test failed: ' + error.message, 'error');
+                console.error('Video liveness test error:', error);
+            }
+        }
+        
+        // Show test result
+        function showTestResult(message, type) {
+            const testResult = document.getElementById('testVideoResult');
+            if (testResult) {
+                testResult.className = 'mt-3 p-3 rounded-lg';
+                
+                if (type === 'success') {
+                    testResult.className += ' bg-green-100 text-green-800 border border-green-200';
+                } else if (type === 'error') {
+                    testResult.className += ' bg-red-100 text-red-800 border border-red-200';
+                } else if (type === 'info') {
+                    testResult.className += ' bg-blue-100 text-blue-800 border border-blue-200';
+                } else {
+                    testResult.className += ' bg-gray-100 text-gray-800 border border-gray-200';
+                }
+                
+                testResult.textContent = message;
+                testResult.classList.remove('hidden');
+                
+                // Auto-hide after 5 seconds for info messages
+                if (type === 'info') {
+                    setTimeout(() => {
+                        testResult.classList.add('hidden');
+                    }, 5000);
+                }
+            }
+        }
+        
+        // Extract birthday from identity document using OCR
+        async function extractBirthdayFromDocument(documentFile, documentType) {
+            try {
+                // Create form data for OCR processing
+                const formData = new FormData();
+                formData.append('documentImage', documentFile);
+                formData.append('documentType', documentType);
+                
+                // Call OCR endpoint
+                const response = await fetch('/api/extract-birthday', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    return {
+                        success: true,
+                        birthday: result.birthday,
+                        extractedText: result.extractedText,
+                        confidence: result.confidence
+                    };
+                } else {
+                    return {
+                        success: false,
+                        error: result.error || 'Failed to extract birthday'
+                    };
+                }
+                
+            } catch (error) {
+                return {
+                    success: false,
+                    error: 'OCR processing failed: ' + error.message
+                };
+            }
+        }
+        
+        // Show message to user
+        function showMessage(message, type) {
+            const messageContainer = document.getElementById('messageContainer');
+            if (messageContainer) {
+                const messageDiv = document.createElement('div');
+                let className = 'mb-4 p-4 rounded-lg border ';
+                
+                switch (type) {
+                    case 'success':
+                        className += 'bg-green-100 text-green-800 border-green-200';
+                        break;
+                    case 'error':
+                        className += 'bg-red-100 text-red-800 border-red-200';
+                        break;
+                    case 'info':
+                        className += 'bg-blue-100 text-blue-800 border-blue-200';
+                        break;
+                    default:
+                        className += 'bg-gray-100 text-gray-800 border-gray-200';
+                }
+                
+                messageDiv.className = className;
+                messageDiv.textContent = message;
+                
+                messageContainer.appendChild(messageDiv);
+                
+                // Auto-remove after 5 seconds
+                setTimeout(() => {
+                    if (messageDiv.parentNode) {
+                        messageDiv.parentNode.removeChild(messageDiv);
+                    }
+                }, 5000);
+            }
+        }
+        
+        // Update UI after successful registration
+        function updateRegistrationSuccess(birthday, walletAddress) {
+            // Update wallet address display
+            if (walletAddress) {
+                const walletAddressDisplay = document.getElementById('walletAddress');
+                if (walletAddressDisplay) {
+                    walletAddressDisplay.textContent = walletAddress;
+                }
+            }
+            
+            // Update status displays
+            const identityStatus = document.getElementById('identityStatus');
+            const livenessStatus = document.getElementById('livenessStatus');
+            
+            if (identityStatus) {
+                identityStatus.textContent = 'Verified';
+            }
+            
+            if (livenessStatus) {
+                livenessStatus.textContent = 'Verified';
+            }
+            
+            // Update birthday display if available
+            if (birthday) {
+                const birthdayDisplay = document.getElementById('birthdayDisplay');
+                if (birthdayDisplay) {
+                    birthdayDisplay.textContent = birthday;
+                }
+                
+                // Also update the date input field to show the extracted birthday
+                const dateInput = document.getElementById('dateOfBirth');
+                if (dateInput && birthday) {
+                    // Convert date format if needed (assuming MM/DD/YYYY format)
+                    const dateParts = birthday.split('/');
+                    if (dateParts.length === 3) {
+                        const year = dateParts[2];
+                        const month = dateParts[0].padStart(2, '0');
+                        const day = dateParts[1].padStart(2, '0');
+                        const formattedDate = `${year}-${month}-${day}`;
+                        dateInput.value = formattedDate;
+                    }
+                }
+                
+                // Enable the backdated UUBI claim button since we have the birthday
+                const claimButton = document.getElementById('claimBackdatedUUBI');
+                if (claimButton) {
+                    claimButton.disabled = false;
+                    claimButton.innerHTML = '<i class="fas fa-history mr-2"></i>Claim Backdated UUBI (Auto)';
+                }
+            }
+            
+            // Disable the register button
+            const button = document.getElementById('registerButton');
+            if (button) {
+                button.disabled = true;
+                button.innerHTML = '<i class="fas fa-check mr-2"></i>Identity Registered';
+                button.className = button.className.replace('bg-purple-600', 'bg-green-600');
+            }
+        }
+        
+        // Claim backdated UUBI using extracted birthday
+        async function claimBackdatedUUBI() {
+            const button = document.getElementById('claimBackdatedUUBI');
+            const walletAddress = document.getElementById('walletAddress').textContent;
+            
+            // Check if user has registered
+            if (walletAddress === 'Not connected') {
+                showMessage('Please register your identity first', 'error');
+                return;
+            }
+            
+            try {
+                // Show loading state
+                button.disabled = true;
+                button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Claiming...';
+                showMessage('Claiming backdated UUBI using extracted birthday...', 'info');
+                
+                // Use the automatic endpoint that uses extracted birthday
+                const response = await fetch('/api/claim-backdated-uubi-auto', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        walletAddress: walletAddress,
+                        signature: 'verified' // Simple signature for development
+                    })
+                });
+                
+                const result = await response.json();
+                
+                // Reset button
+                button.disabled = false;
+                button.innerHTML = '<i class="fas fa-history mr-2"></i>Claim Backdated UUBI';
+                
+                if (result.success) {
+                    const ageInDays = result.data.ageInDays;
+                    const amount = result.data.amount;
+                    const transactionHash = result.data.transactionHash;
+                    const dateOfBirth = result.data.dateOfBirth;
+                    
+                    showMessage(`✅ Successfully claimed ${ageInDays} days of backdated UUBI! Amount: ${amount} tokens. Transaction: ${transactionHash}`, 'success');
+                    
+                    // Update the date of birth input to show what was used
+                    const dateInput = document.getElementById('dateOfBirth');
+                    if (dateInput && dateOfBirth) {
+                        // Convert date format if needed
+                        const formattedDate = new Date(dateOfBirth).toISOString().split('T')[0];
+                        dateInput.value = formattedDate;
+                    }
+                } else {
+                    showMessage('❌ Backdated UUBI claim failed: ' + result.error, 'error');
+                }
+                
+            } catch (error) {
+                // Reset button
+                button.disabled = false;
+                button.innerHTML = '<i class="fas fa-history mr-2"></i>Claim Backdated UUBI';
+                
+                showMessage('❌ Claim failed: ' + error.message, 'error');
+                console.error('Backdated UUBI claim error:', error);
+            }
+        }
+        
+        // Login to existing account function
+        async function loginToExistingAccount() {
+            const button = document.getElementById('loginExisting');
+            const walletAddressElement = document.getElementById('walletAddress');
+            
+            try {
+                // Prompt user for wallet address
+                const walletAddress = prompt('Enter your registered wallet address:');
+                
+                if (!walletAddress) {
+                    showMessage('❌ Wallet address is required to login', 'error');
+                    return;
+                }
+                
+                // Validate wallet address format (very flexible for development)
+                if (!walletAddress.startsWith('0x') || walletAddress.length < 5) {
+                    showMessage('❌ Invalid wallet address format. Must start with 0x and be at least 5 characters long.', 'error');
+                    return;
+                }
+                
+                // Show loading state
+                button.disabled = true;
+                button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Logging in...';
+                
+                console.log('🔍 Attempting to login with wallet:', walletAddress);
+                
+                // Check if wallet is registered
+                const loginResponse = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        walletAddress: walletAddress
+                    })
+                });
+                
+                const loginResult = await loginResponse.json();
+                
+                if (loginResult.success && loginResult.isRegistered) {
+                    // Successfully logged in
+                    console.log('✅ Successfully logged in to existing account:', walletAddress);
+                    
+                    // Update wallet address display
+                    if (walletAddressElement) {
+                        walletAddressElement.textContent = walletAddress;
+                        walletAddressElement.style.color = '#28a745';
+                        walletAddressElement.style.fontWeight = 'bold';
+                    }
+                    
+                    // Show mining section since user is now logged in
+                    checkLoginStatus();
+                    
+                    // Update button state
+                    button.innerHTML = '<i class="fas fa-sign-in-alt mr-2"></i>Logged In';
+                    button.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+                    button.classList.add('bg-green-600', 'text-white', 'hover:bg-green-700');
+                    
+                    showMessage('✅ Successfully logged in to your registered account!', 'success');
+                    
+                    // Update status cards with account information
+                    updateAccountStatus(loginResult);
+                    
+                    // Enable all sections for registered user
+                    enableRegisteredUserSections();
+                    
+                    // Update connect wallet button to show connected state
+                    const connectBtn = document.getElementById('connectWallet');
+                    if (connectBtn) {
+                        connectBtn.innerHTML = '<i class="fas fa-check mr-2"></i>Wallet Connected';
+                        connectBtn.classList.remove('bg-white', 'text-purple-600', 'hover:bg-gray-100');
+                        connectBtn.classList.add('bg-green-600', 'text-white', 'hover:bg-green-700');
+                        connectBtn.disabled = true;
+                    }
+                    
+                } else {
+                    // Wallet is not registered
+                    console.log('❌ Wallet is not registered:', walletAddress);
+                    
+                    // Reset button state
+                    button.disabled = false;
+                    button.innerHTML = '<i class="fas fa-sign-in-alt mr-2"></i>Login to Existing Account';
+                    
+                    showMessage('❌ This wallet address is not registered. Please register your identity first.', 'error');
+                }
+                
+            } catch (error) {
+                console.error('❌ Login failed:', error);
+                
+                // Reset button state
+                button.disabled = false;
+                button.innerHTML = '<i class="fas fa-sign-in-alt mr-2"></i>Login to Existing Account';
+                
+                showMessage('❌ Login failed: ' + error.message, 'error');
+            }
+        }
+        
+        // Show email/phone registration form
+        function showEmailPhoneRegistration() {
+            console.log('📝 Showing email/phone registration form...');
+            
+            // Hide other sections
+            document.getElementById('emailPhoneLoginSection').style.display = 'none';
+            document.getElementById('emailPhoneRegistrationSection').style.display = 'block';
+            
+            // Clear forms
+            document.getElementById('emailPhoneRegistrationForm').reset();
+            
+            // Scroll to registration form
+            document.getElementById('emailPhoneRegistrationSection').scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'start' 
+            });
+            
+            // Focus first input field
+            const firstInput = document.querySelector('#emailPhoneRegistrationSection input');
+            if (firstInput) {
+                firstInput.focus();
+            }
+            
+            console.log('✅ Registration form should now be visible and focused');
+            showMessage('Please fill out the registration form below.', 'info');
+        }
+        
+        // Show email/phone login form
+        function showEmailPhoneLogin() {
+            console.log('🔑 Showing email/phone login form...');
+            
+            try {
+                // Hide other sections
+                const registrationSection = document.getElementById('emailPhoneRegistrationSection');
+                const loginSection = document.getElementById('emailPhoneLoginSection');
+                
+                console.log('🔍 Registration section found:', !!registrationSection);
+                console.log('🔍 Login section found:', !!loginSection);
+                
+                if (registrationSection) {
+                    registrationSection.style.display = 'none';
+                    console.log('✅ Hidden registration section');
+                } else {
+                    console.error('❌ Registration section not found');
+                }
+                
+                if (loginSection) {
+                    loginSection.style.display = 'block';
+                    console.log('✅ Showed login section');
+                } else {
+                    console.error('❌ Login section not found');
+                }
+                
+                // Clear forms
+                const loginForm = document.getElementById('emailPhoneLoginForm');
+                if (loginForm) {
+                    loginForm.reset();
+                    console.log('✅ Reset login form');
+                } else {
+                    console.error('❌ Login form not found');
+                }
+                
+                // Scroll to login form
+                if (loginSection) {
+                    loginSection.scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'start' 
+                    });
+                    console.log('✅ Scrolled to login form');
+                }
+                
+                // Focus first input field
+                const firstInput = document.querySelector('#emailPhoneLoginSection input');
+                if (firstInput) {
+                    firstInput.focus();
+                    console.log('✅ Focused first input');
+                } else {
+                    console.error('❌ First input not found');
+                }
+                
+                console.log('✅ Login form should now be visible and focused');
+                showMessage('Please enter your login credentials.', 'info');
+                
+            } catch (error) {
+                console.error('❌ Error in showEmailPhoneLogin():', error);
+                showMessage('❌ Error showing login form: ' + error.message, 'error');
+            }
+        }
+        
+        // Handle email/phone registration
+        async function handleEmailPhoneRegistration() {
+            const form = document.getElementById('emailPhoneRegistrationForm');
+            const submitBtn = document.getElementById('submitEmailPhoneRegistration');
+            
+            try {
+                // Get form data
+                const formData = new FormData(form);
+                const email = formData.get('email');
+                const phone = formData.get('phone');
+                const password = formData.get('password');
+                const confirmPassword = formData.get('confirmPassword');
+                
+                // Basic validation
+                if (!email && !phone) {
+                    showMessage('❌ Please provide either an email address or phone number.', 'error');
+                    return;
+                }
+                
+                if (!password) {
+                    showMessage('❌ Password is required.', 'error');
+                    return;
+                }
+                
+                if (password !== confirmPassword) {
+                    showMessage('❌ Passwords do not match.', 'error');
+                    return;
+                }
+                
+                // Show loading state
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Creating Account...';
+                
+                // Call registration API
+                const response = await fetch('/api/register-account', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email || null,
+                        phone: phone || null,
+                        password: password,
+                        confirmPassword: confirmPassword
+                    })
+                });
+                
+                const result = await response.json();
+                
+                // Reset button
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-user-plus mr-2"></i>Create Account';
+                
+                if (result.success) {
+                    showMessage('✅ Account created successfully! You can now register your identity.', 'success');
+                    
+                    // Store user data
+                    localStorage.setItem('userToken', result.data.token);
+                    localStorage.setItem('userWallet', result.data.walletAddress);
+                    
+                    // Update UI
+                    updateWalletDisplay(result.data.walletAddress);
+                    enableRegistrationSection();
+                    
+                    // Hide registration form
+                    document.getElementById('emailPhoneRegistrationSection').classList.add('hidden');
+                    
+                    // Update navigation buttons
+                    updateNavigationForLoggedInUser(result.data);
+                    
+                } else {
+                    showMessage('❌ Registration failed: ' + result.error, 'error');
+                }
+                
+            } catch (error) {
+                console.error('Registration error:', error);
+                
+                // Reset button
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-user-plus mr-2"></i>Create Account';
+                
+                showMessage('❌ Registration failed: ' + error.message, 'error');
+            }
+        }
+        
+        // Handle email/phone login
+        async function handleEmailPhoneLogin() {
+            const form = document.getElementById('emailPhoneLoginForm');
+            const submitBtn = document.getElementById('submitEmailPhoneLogin');
+            
+            try {
+                // Get form data
+                const formData = new FormData(form);
+                const email = formData.get('email');
+                const phone = formData.get('phone');
+                const password = formData.get('password');
+                
+                // Basic validation
+                if (!email && !phone) {
+                    showMessage('❌ Please provide either an email address or phone number.', 'error');
+                    return;
+                }
+                
+                if (!password) {
+                    showMessage('❌ Password is required.', 'error');
+                    return;
+                }
+                
+                // Show loading state
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Logging in...';
+                
+                // Call login API
+                const response = await fetch('/api/login-account', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email || null,
+                        phone: phone || null,
+                        password: password
+                    })
+                });
+                
+                const result = await response.json();
+                
+                // Reset button
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-sign-in-alt mr-2"></i>Login';
+                
+                if (result.success) {
+                    showMessage('✅ Login successful! Welcome back.', 'success');
+                    
+                    // Store user data
+                    localStorage.setItem('userToken', result.data.token);
+                    localStorage.setItem('userWallet', result.data.walletAddress);
+                    
+                    // Update UI
+                    updateWalletDisplay(result.data.walletAddress);
+                    enableRegistrationSection();
+                    
+                    // Hide login form
+                    document.getElementById('emailPhoneLoginSection').style.display = 'none';
+                    
+                    // Update navigation buttons
+                    updateNavigationForLoggedInUser(result.data);
+                    
+                } else {
+                    showMessage('❌ Login failed: ' + result.error, 'error');
+                }
+                
+            } catch (error) {
+                console.error('Login error:', error);
+                
+                // Reset button
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-sign-in-alt mr-2"></i>Login';
+                
+                showMessage('❌ Login failed: ' + error.message, 'error');
+            }
+        }
+        
+        // Update navigation for logged in user
+        function updateNavigationForLoggedInUser(userData) {
+            // Update register account button
+            const registerBtn = document.getElementById('registerAccount');
+            if (registerBtn) {
+                registerBtn.innerHTML = '<i class="fas fa-user-check mr-2"></i>Account Created';
+                registerBtn.classList.remove('bg-green-600', 'hover:bg-green-700');
+                registerBtn.classList.add('bg-gray-600', 'text-white');
+                registerBtn.disabled = true;
+            }
+            
+            // Update login existing button
+            const loginBtn = document.getElementById('loginExisting');
+            if (loginBtn) {
+                loginBtn.innerHTML = '<i class="fas fa-sign-in-alt mr-2"></i>Logged In';
+                loginBtn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+                loginBtn.classList.add('bg-gray-600', 'text-white');
+                loginBtn.disabled = true;
+            }
+        }
+        
+        // Update wallet display
+        function updateWalletDisplay(walletAddress) {
+            const walletAddressElement = document.getElementById('walletAddress');
+            if (walletAddressElement) {
+                walletAddressElement.textContent = walletAddress;
+                walletAddressElement.style.color = '#28a745';
+                walletAddressElement.style.fontWeight = 'bold';
+            }
+            
+            // Show mining section since user is now logged in
+            checkLoginStatus();
+        }
+        
+        // Show password reset request form
+        function showPasswordResetRequest() {
+            // Hide other sections
+            document.getElementById('emailPhoneLoginSection').style.display = 'none';
+            document.getElementById('emailPhoneRegistrationSection').style.display = 'none';
+            document.getElementById('passwordResetFormSection').classList.add('hidden');
+            document.getElementById('passwordResetRequestSection').classList.remove('hidden');
+            
+            // Clear form
+            document.getElementById('passwordResetRequestForm').reset();
+            
+            showMessage('Enter your email address to receive a password reset link.', 'info');
+        }
+        
+        // Handle password reset request
+        async function handlePasswordResetRequest() {
+            const form = document.getElementById('passwordResetRequestForm');
+            const submitBtn = document.getElementById('submitPasswordResetRequest');
+            
+            try {
+                // Get form data
+                const formData = new FormData(form);
+                const email = formData.get('email');
+                
+                // Basic validation
+                if (!email) {
+                    showMessage('❌ Email address is required.', 'error');
+                    return;
+                }
+                
+                // Show loading state
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Sending...';
+                
+                // Call password reset request API
+                const response = await fetch('/api/request-password-reset', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email
+                    })
+                });
+                
+                const result = await response.json();
+                
+                // Reset button
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane mr-2"></i>Send Reset Link';
+                
+                if (result.success) {
+                    showMessage('✅ ' + result.message, 'success');
+                    
+                    // In development mode, show the reset URL
+                    if (result.resetUrl) {
+                        const isDemo = result.isDemo ? ' (Demo URL - User not found)' : '';
+                        showMessage('🔗 Development Mode - Reset URL: ' + result.resetUrl + isDemo, 'info');
+                        
+                        // Also show it in a more prominent way
+                        setTimeout(() => {
+                            showMessage('📋 Copy this URL to test password reset: ' + result.resetUrl, 'success');
+                        }, 1000);
+                    }
+                    
+                    // Clear form
+                    form.reset();
+                    
+                } else {
+                    showMessage('❌ Password reset request failed: ' + result.error, 'error');
+                }
+                
+            } catch (error) {
+                console.error('Password reset request error:', error);
+                
+                // Reset button
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane mr-2"></i>Send Reset Link';
+                
+                showMessage('❌ Password reset request failed: ' + error.message, 'error');
+            }
+        }
+        
+        // Handle password reset with token
+        async function handlePasswordReset() {
+            const form = document.getElementById('passwordResetForm');
+            const submitBtn = document.getElementById('submitPasswordReset');
+            
+            try {
+                // Get form data
+                const formData = new FormData(form);
+                const token = formData.get('token');
+                const newPassword = formData.get('newPassword');
+                const confirmPassword = formData.get('confirmPassword');
+                
+                // Basic validation
+                if (!token) {
+                    showMessage('❌ Reset token is missing.', 'error');
+                    return;
+                }
+                
+                if (!newPassword) {
+                    showMessage('❌ New password is required.', 'error');
+                    return;
+                }
+                
+                if (newPassword !== confirmPassword) {
+                    showMessage('❌ Passwords do not match.', 'error');
+                    return;
+                }
+                
+                // Show loading state
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Resetting...';
+                
+                // Call password reset API
+                const response = await fetch('/api/reset-password', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        token: token,
+                        newPassword: newPassword,
+                        confirmPassword: confirmPassword
+                    })
+                });
+                
+                const result = await response.json();
+                
+                // Reset button
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-check mr-2"></i>Reset Password';
+                
+                if (result.success) {
+                    showMessage('✅ ' + result.message, 'success');
+                    
+                    // Hide reset form and show login form
+                    document.getElementById('passwordResetFormSection').classList.add('hidden');
+                    showEmailPhoneLogin();
+                    
+                } else {
+                    showMessage('❌ Password reset failed: ' + result.error, 'error');
+                }
+                
+            } catch (error) {
+                console.error('Password reset error:', error);
+                
+                // Reset button
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-check mr-2"></i>Reset Password';
+                
+                showMessage('❌ Password reset failed: ' + error.message, 'error');
+            }
+        }
+        
+        // Check for password reset token in URL
+        function checkForResetToken() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const token = urlParams.get('token');
+            
+            console.log('🔍 Checking for reset token in URL...');
+            console.log('URL:', window.location.href);
+            console.log('Token found:', token);
+            
+            // Only check for reset token if we're on the reset-password page
+            if (window.location.pathname === '/reset-password' && token) {
+                console.log('✅ Reset token detected on reset-password page, verifying...');
+                // Immediately show reset form while verifying
+                document.getElementById('emailPhoneLoginSection').style.display = 'none';
+                document.getElementById('emailPhoneRegistrationSection').style.display = 'none';
+                document.getElementById('passwordResetRequestSection').classList.add('hidden');
+                document.getElementById('passwordResetFormSection').classList.remove('hidden');
+                document.getElementById('resetToken').value = token;
+                
+                // Then verify token
+                verifyResetToken(token);
+            } else if (window.location.pathname === '/reset-password' && !token) {
+                console.log('❌ On reset-password page but no token found');
+                showMessage('❌ No reset token found in URL. Please use the password reset link from your email.', 'error');
+            } else {
+                console.log('❌ No reset token found in URL (not on reset-password page)');
+            }
+        }
+        
+        // Track if token verification is already in progress
+        let tokenVerificationInProgress = false;
+
+        // Verify reset token and show reset form
+        async function verifyResetToken(token) {
+            // Prevent multiple simultaneous verifications
+            if (tokenVerificationInProgress) {
+                console.log('⏳ Token verification already in progress, skipping...');
+                return;
+            }
+            
+            tokenVerificationInProgress = true;
+            console.log('🔐 Verifying reset token:', token);
+            
+            try {
+                const response = await fetch(`/api/verify-reset-token?token=${token}`);
+                const result = await response.json();
+                
+                console.log('📡 Token verification response:', result);
+                
+                if (result.success) {
+                    console.log('✅ Token is valid, reset form should be visible');
+                    showMessage('✅ Reset token is valid. Please enter your new password.', 'success');
+                } else {
+                    console.log('❌ Token verification failed:', result.error);
+                    showMessage('❌ Invalid or expired reset token: ' + result.error, 'error');
+                    // Hide the form if token is invalid
+                    document.getElementById('passwordResetFormSection').classList.add('hidden');
+                }
+            } catch (error) {
+                console.log('❌ Token verification error:', error);
+                showMessage('❌ Failed to verify reset token: ' + error.message, 'error');
+            } finally {
+                tokenVerificationInProgress = false;
+            }
+        }
+        
+        // Update account status for registered users
+        function updateAccountStatus(loginResult) {
+            // Update identity status
+            const identityStatus = document.querySelector('[data-status="identity"]');
+            if (identityStatus) {
+                identityStatus.innerHTML = '<i class="fas fa-check-circle text-green-500"></i> Verified';
+                identityStatus.className = 'text-green-600 font-medium';
+            }
+            
+            // Update birthday status if available
+            const birthdayStatus = document.querySelector('[data-status="birthday"]');
+            if (birthdayStatus && loginResult.storedBirthday) {
+                birthdayStatus.innerHTML = `<i class="fas fa-calendar text-green-500"></i> ${loginResult.storedBirthday}`;
+                birthdayStatus.className = 'text-green-600 font-medium';
+            }
+            
+            // Update UUBI status
+            const uubiStatus = document.querySelector('[data-status="uubi"]');
+            if (uubiStatus) {
+                if (loginResult.uubiStatus && loginResult.uubiStatus.canClaim) {
+                    uubiStatus.innerHTML = '<i class="fas fa-coins text-green-500"></i> Can Claim';
+                    uubiStatus.className = 'text-green-600 font-medium';
+                } else {
+                    uubiStatus.innerHTML = '<i class="fas fa-clock text-yellow-500"></i> Pending';
+                    uubiStatus.className = 'text-yellow-600 font-medium';
+                }
+            }
+        }
+        
+        // Enable sections for registered users
+        function enableRegisteredUserSections() {
+            // Enable all sections
+            const sections = document.querySelectorAll('.bg-white.rounded-lg.shadow-lg');
+            sections.forEach(section => {
+                section.style.opacity = '1';
+                section.style.pointerEvents = 'auto';
+            });
+            
+            // Show registered user specific content
+            const registrationSection = document.querySelector('.bg-white.rounded-lg.shadow-lg:first-of-type');
+            if (registrationSection) {
+                const existingContent = registrationSection.querySelector('h3');
+                if (existingContent && !existingContent.textContent.includes('Already Registered')) {
+                    existingContent.innerHTML = '✅ Already Registered - Account Management';
+                }
+            }
+            
+            // Enable backdated UUBI claim if birthday is available
+            const claimButton = document.getElementById('claimBackdatedUUBI');
+            const dateInput = document.getElementById('dateOfBirth');
+            if (claimButton && dateInput) {
+                claimButton.disabled = false;
+                dateInput.disabled = false;
+                claimButton.innerHTML = '<i class="fas fa-history mr-2"></i>Claim Backdated UUBI';
+            }
+        }
+        
+        // Enable registration section for new users
+        function enableRegistrationSection() {
+            const registrationSection = document.querySelector('.bg-white.rounded-lg.shadow-lg:first-of-type');
+            if (registrationSection) {
+                registrationSection.style.opacity = '1';
+                registrationSection.style.pointerEvents = 'auto';
+            }
+        }
+        
+        // Clear all existing error messages
+        function clearAllMessages() {
+            const container = document.getElementById('messageContainer');
+            if (container) {
+                container.innerHTML = '';
+            }
+        }
+
+        
+        // Mining functionality
+        let miningState = {
+            isMining: false,
+            miningStartTime: null,
+            currentHashes: 0,
+            miningInterval: null,
+            minerAddress: 'miner-' + Date.now(),
+            userBalance: 0,
+            ubiPool: 0,
+            blocksMined: 0,
+            totalHashes: 0
+        };
+        
+        // Web Worker for background mining
+        let miningWorker = null;
+        let isPageVisible = true;
+        
+        function initializeMining() {
+            console.log('⛏️  Initializing mining functionality...');
+            
+            // Initialize Web Worker for background mining
+            initializeMiningWorker();
+            
+            // Set up page visibility handling
+            setupPageVisibilityHandling();
+            
+            // Set default miner address
+            const minerAddressInput = document.getElementById('minerAddressInput');
+            if (minerAddressInput) {
+                minerAddressInput.value = miningState.minerAddress;
+            }
+            
+            // Setup mining event listeners
+            const startMiningBtn = document.getElementById('startMiningBtn');
+            const stopMiningBtn = document.getElementById('stopMiningBtn');
+            
+            if (startMiningBtn) {
+                startMiningBtn.addEventListener('click', startMining);
+                console.log('✅ Start mining button listener added');
+            }
+            
+            if (stopMiningBtn) {
+                stopMiningBtn.addEventListener('click', stopMining);
+                console.log('✅ Stop mining button listener added');
+            }
+            
+            // Check if user is logged in and show mining section
+            checkLoginStatus();
+            
+            // Load mining data
+            loadMiningData();
+            
+            // Load system stats
+            loadSystemStats();
+        }
+        
+        function initializeMiningWorker() {
+            try {
+                // Create Web Worker for background mining
+                miningWorker = new Worker('/mining-worker.js');
+                
+                // Listen for messages from worker
+                miningWorker.onmessage = function(e) {
+                    handleWorkerMessage(e.data);
+                };
+                
+                // Handle worker errors
+                miningWorker.onerror = function(error) {
+                    console.error('❌ Mining worker error:', error);
+                    showMessage('Mining worker error: ' + error.message, 'error');
+                };
+                
+                console.log('✅ Mining worker initialized');
+            } catch (error) {
+                console.error('❌ Failed to initialize mining worker:', error);
+                showMessage('Failed to initialize background mining', 'error');
+            }
+        }
+        
+        function setupPageVisibilityHandling() {
+            // Handle page visibility changes
+            document.addEventListener('visibilitychange', function() {
+                isPageVisible = !document.hidden;
+                
+                if (isPageVisible) {
+                    console.log('👁️  Page visible - syncing mining state');
+                    syncMiningState();
+                } else {
+                    console.log('👁️  Page hidden - mining continues in background');
+                }
+            });
+            
+            // Handle window focus/blur
+            window.addEventListener('focus', function() {
+                console.log('👁️  Window focused - syncing mining state');
+                syncMiningState();
+            });
+            
+            window.addEventListener('blur', function() {
+                console.log('👁️  Window blurred - mining continues in background');
+            });
+        }
+        
+        function handleWorkerMessage(data) {
+            switch (data.type) {
+                case 'miningStarted':
+                    console.log('✅ Background mining started');
+                    updateMiningUI(true);
+                    break;
+                    
+                case 'miningStopped':
+                    console.log('🛑 Background mining stopped');
+                    updateMiningUI(false);
+                    break;
+                    
+                case 'blockMined':
+                    handleBlockMined(data.data);
+                    break;
+                    
+                case 'statsUpdate':
+                    updateMiningStatsFromWorker(data.data);
+                    break;
+                    
+                default:
+                    console.log('Unknown worker message:', data.type);
+            }
+        }
+        
+        function syncMiningState() {
+            if (miningWorker && miningState.isMining) {
+                // Request current stats from worker
+                miningWorker.postMessage({ action: 'getStats' });
+            }
+        }
+        
+        function updateMiningUI(isMining) {
+            const startBtn = document.getElementById('startMiningBtn');
+            const stopBtn = document.getElementById('stopMiningBtn');
+            const statusDiv = document.getElementById('miningStatus');
+            const progressDiv = document.getElementById('miningProgress');
+            const resultsDiv = document.getElementById('miningResults');
+            
+            if (startBtn) startBtn.disabled = isMining;
+            if (stopBtn) stopBtn.disabled = !isMining;
+            if (statusDiv) statusDiv.classList.toggle('hidden', !isMining);
+            if (progressDiv) progressDiv.classList.toggle('hidden', !isMining);
+            if (resultsDiv && !isMining) resultsDiv.classList.add('hidden');
+            
+            // Reset progress bar when starting
+            if (isMining) {
+                const progressBar = document.getElementById('miningProgressBar');
+                const progressText = document.getElementById('miningProgressText');
+                if (progressBar) progressBar.style.width = '0%';
+                if (progressText) progressText.textContent = '0%';
+            }
+        }
+        
+        function handleBlockMined(blockData) {
+            console.log('🎉 Block mined:', blockData);
+            
+            // Update mining state
+            miningState.blocksMined = blockData.blockNumber || 0;
+            miningState.userBalance = blockData.userBalance || 0;
+            miningState.ubiPool = blockData.ubiPool || 0;
+            miningState.totalHashes = (miningState.totalHashes || 0) + (blockData.nonce || 0) * 1000;
+            
+            console.log('📊 Updated mining state after block:', {
+                blocksMined: miningState.blocksMined,
+                userBalance: miningState.userBalance,
+                ubiPool: miningState.ubiPool,
+                totalHashes: miningState.totalHashes
+            });
+            
+            // Update UI
+            updateMiningStats();
+            updateBlocksMinedCount();
+            
+            // Complete progress bar to 100% when block is actually mined
+            const progressBar = document.getElementById('miningProgressBar');
+            const progressText = document.getElementById('miningProgressText');
+            if (progressBar) progressBar.style.width = '100%';
+            if (progressText) progressText.textContent = '100%';
+            
+            // Reset progress bar for next block after a brief delay
+            setTimeout(() => {
+                resetProgressBar();
+            }, 1000); // 1 second delay to show completion
+            
+            // Add to history
+            addToMiningHistory({
+                hash: blockData.blockHash,
+                nonce: blockData.nonce,
+                time: blockData.miningTime,
+                hashrate: blockData.hashrate,
+                difficulty: blockData.difficulty,
+                totalReward: blockData.totalReward,
+                minerReward: blockData.minerReward,
+                ubiReward: blockData.ubiReward,
+                timestamp: blockData.timestamp,
+                blockNumber: blockData.blockNumber
+            });
+            
+            // Show results briefly (only if page is visible)
+            if (isPageVisible) {
+                showMiningResults(
+                    blockData.blockHash,
+                    blockData.nonce,
+                    blockData.miningTime,
+                    blockData.difficulty,
+                    blockData.totalReward,
+                    blockData.minerReward,
+                    blockData.ubiReward
+                );
+            }
+            
+            // Show browser notification if page is hidden
+            if (!isPageVisible) {
+                showBrowserNotification(
+                    `Block #${blockData.blockNumber} Mined!`,
+                    `+${blockData.minerReward} UUBI earned (${blockData.ubiReward} to UBI pool)`
+                );
+            }
+            
+            // Show success message
+            showMessage(`Block #${blockData.blockNumber} mined! +${blockData.minerReward} UUBI (${blockData.ubiReward} to UBI pool)`, 'success');
+        }
+        
+        function showBrowserNotification(title, body) {
+            // Check if notifications are supported
+            if (!('Notification' in window)) {
+                console.log('Browser notifications not supported');
+                return;
+            }
+            
+            // Check if permission is granted
+            if (Notification.permission === 'granted') {
+                new Notification(title, {
+                    body: body,
+                    icon: '/favicon.ico',
+                    tag: 'uubi-mining'
+                });
+            } else if (Notification.permission !== 'denied') {
+                // Request permission
+                Notification.requestPermission().then(permission => {
+                    if (permission === 'granted') {
+                        new Notification(title, {
+                            body: body,
+                            icon: '/favicon.ico',
+                            tag: 'uubi-mining'
+                        });
+                    }
+                });
+            }
+        }
+        
+        function updateMiningStatsFromWorker(workerData) {
+            console.log('📊 Updating stats from worker:', workerData);
+            
+            miningState.blocksMined = workerData.blocksMined || 0;
+            miningState.totalHashes = workerData.totalHashes || 0;
+            miningState.userBalance = workerData.userBalance || 0;
+            miningState.ubiPool = workerData.ubiPool || 0;
+            miningState.currentHashes = workerData.currentHashes || 0;
+            
+            console.log('📊 Updated mining state:', {
+                blocksMined: miningState.blocksMined,
+                totalHashes: miningState.totalHashes,
+                userBalance: miningState.userBalance,
+                ubiPool: miningState.ubiPool
+            });
+            
+            updateMiningStats();
+            updateBlocksMinedCount();
+        }
+        
+        function checkLoginStatus() {
+            // Check if user is logged in by looking for wallet connection or user data
+            const walletAddress = document.getElementById('walletAddress');
+            const miningSection = document.getElementById('miningSection');
+            const logoutBtn = document.getElementById('logoutBtn');
+            
+            if (walletAddress && miningSection) {
+                const isLoggedIn = walletAddress.textContent && walletAddress.textContent !== 'Not connected';
+                
+                if (isLoggedIn) {
+                    miningSection.classList.remove('hidden');
+                    if (logoutBtn) logoutBtn.classList.remove('hidden');
+                    console.log('✅ User logged in - showing mining section and logout button');
+                } else {
+                    miningSection.classList.add('hidden');
+                    if (logoutBtn) logoutBtn.classList.add('hidden');
+                    console.log('ℹ️  User not logged in - hiding mining section and logout button');
+                }
+            }
+        }
+        
+        async function logout() {
+            try {
+                console.log('🚪 Logging out user...');
+                
+                // Call logout API
+                const response = await fetch('/api/logout', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    console.log('✅ Logout successful');
+                    
+                    // Clear UI state
+                    const logoutBtn = document.getElementById('logoutBtn');
+                    if (logoutBtn) logoutBtn.classList.add('hidden');
+                    
+                    // Hide mining section
+                    checkLoginStatus();
+                    
+                    // Clear mining state
+                    if (miningWorker) {
+                        miningWorker.terminate();
+                        miningWorker = null;
+                    }
+                    
+                    // Reset mining UI
+                    const balanceEl = document.getElementById('miningBalance');
+                    const ubiPoolEl = document.getElementById('miningUbiPool');
+                    const hashrateEl = document.getElementById('miningHashrate');
+                    const difficultyEl = document.getElementById('miningDifficulty');
+                    const blocksEl = document.getElementById('miningBlocksMined');
+                    const startBtn = document.getElementById('startMiningBtn');
+                    const stopBtn = document.getElementById('stopMiningBtn');
+                    
+                    if (balanceEl) balanceEl.textContent = '0 UUBI';
+                    if (ubiPoolEl) ubiPoolEl.textContent = '0 UUBI';
+                    if (hashrateEl) hashrateEl.textContent = '0 H/s';
+                    if (difficultyEl) difficultyEl.textContent = '4';
+                    if (blocksEl) blocksEl.textContent = '0';
+                    if (startBtn) startBtn.disabled = false;
+                    if (stopBtn) stopBtn.disabled = true;
+                    
+                    // Clear mining history
+                    const historyEl = document.getElementById('miningHistory');
+                    if (historyEl) {
+                        historyEl.innerHTML = '<p class="text-gray-500 text-center py-4">No mining history yet</p>';
+                    }
+                    
+                    // Reset mining state
+                    miningState = {
+                        isMining: false,
+                        miningStartTime: null,
+                        hashes: 0,
+                        balances: { user: 0, ubi: 0 },
+                        blocksMined: 0,
+                        totalHashes: 0,
+                        minerAddress: 'miner-' + Date.now(),
+                        userBalance: 0,
+                        ubiPool: 0
+                    };
+                    
+                    // Use clean disconnect function
+                    disconnectWallet();
+                    
+                    showMessage('✅ Successfully logged out', 'success');
+                    
+                } else {
+                    const data = await response.json();
+                    console.error('❌ Logout failed:', data.error);
+                    showMessage('Logout failed: ' + data.error, 'error');
+                }
+                
+            } catch (error) {
+                console.error('❌ Error during logout:', error);
+                showMessage('Logout failed: ' + error.message, 'error');
+            }
+        }
+        
+        async function loadMiningData() {
+            try {
+                const response = await fetch('/api/mining/data');
+                const data = await response.json();
+                
+                if (data.success) {
+                    console.log('📊 Loading mining data from server:', data.data);
+                    
+                    // Get current user ID (wallet address or email)
+                    const walletAddress = document.getElementById('walletAddress');
+                    const currentUserId = walletAddress ? walletAddress.textContent : 'anonymous';
+                    
+                    // Initialize mining state with server data
+                    miningState.ubiPool = data.data.ubiPool || 0;
+                    miningState.userBalance = data.data.userBalances[currentUserId] || 0; // Get user's balance from server
+                    miningState.blocksMined = 0; // Start with 0 blocks mined
+                    miningState.totalHashes = 0; // Start with 0 hashes
+                    
+                    console.log('📊 Initialized mining state:', {
+                        ubiPool: miningState.ubiPool,
+                        userBalance: miningState.userBalance,
+                        blocksMined: miningState.blocksMined,
+                        totalHashes: miningState.totalHashes,
+                        currentUserId: currentUserId
+                    });
+                    
+                    updateMiningStats();
+                    updateMiningHistory(data.data.miningHistory);
+                }
+            } catch (error) {
+                console.error('Error loading mining data:', error);
+            }
+        }
+        
+        async function loadSystemStats() {
+            console.log('📊 Starting to load system stats...');
+            
+            try {
+                // Wait a bit to ensure DOM is ready
+                await new Promise(resolve => setTimeout(resolve, 200));
+                
+                const response = await fetch('/api/stats');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                console.log('📊 API response data:', data);
+                
+                if (data.success && data.data) {
+                    console.log('📊 Loading system stats from server:', data.data);
+                    
+                    // Update system information display with retry mechanism
+                    const updateElement = (id, value, fallback = '0') => {
+                        const element = document.getElementById(id);
+                        if (element) {
+                            element.textContent = value || fallback;
+                            console.log(`📊 Updated ${id} to:`, value || fallback);
+                            return true;
+                        } else {
+                            console.error(`❌ Element ${id} not found!`);
+                            return false;
+                        }
+                    };
+                    
+                    // Update all elements
+                    updateElement('totalSupply', data.data.totalSupply, '0');
+                    updateElement('verifiedUsers', data.data.verifiedUsers, '0');
+                    updateElement('dailyDistribution', data.data.dailyDistribution, '1000');
+                    
+                    // Contract address needs special handling
+                    const contractAddressEl = document.getElementById('contractAddress');
+                    if (contractAddressEl) {
+                        const contractAddress = data.data.contractAddress || '-';
+                        contractAddressEl.textContent = contractAddress === '-' ? '-' : 
+                            contractAddress.substring(0, 10) + '...';
+                        console.log('📊 Updated contractAddress to:', contractAddress);
+                    } else {
+                        console.error('❌ contractAddress element not found!');
+                    }
+                    
+                    console.log('📊 System stats updated successfully!');
+                } else {
+                    console.error('📊 API returned error:', data.error || 'Unknown error');
+                }
+            } catch (error) {
+                console.error('❌ Error loading system stats:', error);
+                // Fallback: try to update with default values
+                try {
+                    document.getElementById('totalSupply').textContent = '0';
+                    document.getElementById('verifiedUsers').textContent = '0';
+                    document.getElementById('dailyDistribution').textContent = '1000';
+                    document.getElementById('contractAddress').textContent = '-';
+                } catch (fallbackError) {
+                    console.error('❌ Fallback update failed:', fallbackError);
+                }
+            }
+        }
+        
+        function updateMiningStats() {
+            const balanceEl = document.getElementById('miningBalance');
+            const ubiPoolEl = document.getElementById('miningUbiPool');
+            const hashrateEl = document.getElementById('miningHashrate');
+            const difficultyEl = document.getElementById('miningDifficulty');
+            
+            if (balanceEl) balanceEl.textContent = miningState.userBalance + ' UUBI';
+            if (ubiPoolEl) ubiPoolEl.textContent = miningState.ubiPool + ' UUBI';
+            
+            // Calculate hashrate properly
+            let hashrate = 0;
+            if (miningState.miningStartTime && miningState.totalHashes > 0) {
+                const elapsed = (Date.now() - miningState.miningStartTime) / 1000;
+                hashrate = Math.floor(miningState.totalHashes / elapsed);
+            }
+            
+            if (hashrateEl) hashrateEl.textContent = hashrate.toLocaleString() + ' H/s';
+            if (difficultyEl) difficultyEl.textContent = '4';
+        }
+        
+        async function startMining() {
+            if (miningState.isMining) return;
+            
+            const minerAddressInput = document.getElementById('minerAddressInput');
+            if (minerAddressInput) {
+                miningState.minerAddress = minerAddressInput.value || 'miner-' + Date.now();
+            }
+            
+            try {
+                // Check server status
+                const statusResponse = await fetch('/api/mining/status');
+                const statusData = await statusResponse.json();
+                
+                if (!statusData.success) {
+                    showMessage('Mining server not available', 'error');
+                    return;
+                }
+                
+                // Check if Web Worker is available
+                if (!miningWorker) {
+                    showMessage('Background mining not available', 'error');
+                    return;
+                }
+                
+                miningState.isMining = true;
+                miningState.miningStartTime = Date.now();
+                miningState.currentHashes = 0;
+                miningState.blocksMined = 0;
+                miningState.totalHashes = 0;
+                
+                // Start background mining via Web Worker
+                miningWorker.postMessage({
+                    action: 'startMining',
+                    data: {
+                        minerAddress: miningState.minerAddress
+                    }
+                });
+                
+                // Start progress bar simulation
+                simulateProgressBar();
+                
+                showMessage('Background mining started! Mining continues even when browser is hidden...', 'success');
+                
+            } catch (error) {
+                console.error('Error starting mining:', error);
+                showMessage('Failed to start mining: ' + error.message, 'error');
+                miningState.isMining = false;
+            }
+        }
+        
+        // Progress bar simulation for background mining
+        let progressInterval = null;
+        let currentBlockStartTime = null;
+        let currentBlockDuration = 30 + Math.random() * 60; // 30-90 seconds per block
+        
+        function simulateProgressBar() {
+            if (!miningState.isMining) return;
+            
+            currentBlockStartTime = Date.now();
+            // Use a more realistic duration that matches Web Worker timing
+            // Web Worker typically completes in 10-30 seconds based on hash rate
+            currentBlockDuration = 15 + Math.random() * 25; // 15-40 seconds per block
+            
+            progressInterval = setInterval(() => {
+                if (!miningState.isMining) {
+                    clearInterval(progressInterval);
+                    return;
+                }
+                
+                // Calculate progress for current block
+                const elapsed = (Date.now() - currentBlockStartTime) / 1000;
+                const progress = Math.min(elapsed / currentBlockDuration * 100, 100);
+                
+                // Update progress bar
+                const progressBar = document.getElementById('miningProgressBar');
+                const progressText = document.getElementById('miningProgressText');
+                
+                if (progressBar) progressBar.style.width = progress + '%';
+                if (progressText) progressText.textContent = Math.round(progress) + '%';
+                
+                // Update stats
+                const hashCountEl = document.getElementById('miningHashCount');
+                const nonceEl = document.getElementById('miningCurrentNonce');
+                const elapsedEl = document.getElementById('miningElapsedTime');
+                
+                if (hashCountEl) hashCountEl.textContent = miningState.totalHashes.toLocaleString();
+                if (nonceEl) nonceEl.textContent = Math.floor(miningState.totalHashes / 1000).toLocaleString();
+                if (elapsedEl) elapsedEl.textContent = Math.floor(elapsed) + 's';
+                
+                // Update hashrate
+                updateMiningStats();
+                
+            }, 100); // Update every 100ms
+        }
+        
+        function resetProgressBar() {
+            currentBlockStartTime = Date.now();
+            currentBlockDuration = 15 + Math.random() * 25; // 15-40 seconds per block (matches simulation)
+            
+            const progressBar = document.getElementById('miningProgressBar');
+            const progressText = document.getElementById('miningProgressText');
+            
+            if (progressBar) progressBar.style.width = '0%';
+            if (progressText) progressText.textContent = '0%';
+        }
+        
+        // Complete a single mining block (for continuous mining)
+        async function completeMiningBlock(blockNumber, blockHashes, sessionStartTime) {
+            const blockMiningTime = (Date.now() - miningState.miningStartTime) / 1000;
+            const hashrate = Math.floor(blockHashes / blockMiningTime);
+            
+            // Generate block data
+            const blockHash = generateFakeHash();
+            const nonce = Math.floor(blockHashes / 1000);
+            const difficulty = 4;
+            const totalReward = 50;
+            const minerReward = 17; // 1/3
+            const ubiReward = 33; // 2/3
+            
+            // Update mining state
+            miningState.blocksMined++;
+            miningState.totalHashes += blockHashes;
+            miningState.userBalance += minerReward;
+            miningState.ubiPool += ubiReward;
+            
+            // Update UI
+            updateMiningStats();
+            updateBlocksMinedCount();
+            
+            // Add to history
+            addToMiningHistory({
+                hash: blockHash,
+                nonce: nonce,
+                time: blockMiningTime,
+                hashrate: hashrate,
+                difficulty: difficulty,
+                totalReward: totalReward,
+                minerReward: minerReward,
+                ubiReward: ubiReward,
+                timestamp: new Date().toISOString(),
+                blockNumber: blockNumber
+            });
+            
+            // Show results briefly
+            showMiningResults(blockHash, nonce, blockMiningTime, difficulty, totalReward, minerReward, ubiReward);
+            
+            // Show success message
+            showMessage(`Block #${blockNumber} mined! +${minerReward} UUBI (${ubiReward} to UBI pool)`, 'success');
+        }
+        
+        function updateBlocksMinedCount() {
+            const blocksMinedEl = document.getElementById('blocksMinedCount');
+            if (blocksMinedEl) {
+                blocksMinedEl.textContent = miningState.blocksMined;
+            }
+        }
+        
+        // Show mining results (briefly for continuous mining)
+        function showMiningResults(blockHash, nonce, miningTime, difficulty, totalReward, minerReward, ubiReward) {
+            const resultsDiv = document.getElementById('miningResults');
+            if (!resultsDiv) return;
+            
+            // Show results
+            const blockHashEl = document.getElementById('miningBlockHash');
+            const blockNonceEl = document.getElementById('miningBlockNonce');
+            const blockTimeEl = document.getElementById('miningBlockTime');
+            const blockDifficultyEl = document.getElementById('miningBlockDifficulty');
+            const totalRewardEl = document.getElementById('miningTotalReward');
+            const minerRewardEl = document.getElementById('miningMinerReward');
+            const ubiRewardEl = document.getElementById('miningUbiReward');
+            
+            if (blockHashEl) blockHashEl.textContent = blockHash;
+            if (blockNonceEl) blockNonceEl.textContent = nonce.toLocaleString();
+            if (blockTimeEl) blockTimeEl.textContent = miningTime.toFixed(2) + 's';
+            if (blockDifficultyEl) blockDifficultyEl.textContent = difficulty;
+            if (totalRewardEl) totalRewardEl.textContent = totalReward + ' UUBI';
+            if (minerRewardEl) minerRewardEl.textContent = minerReward + ' UUBI';
+            if (ubiRewardEl) ubiRewardEl.textContent = ubiReward + ' UUBI';
+            
+            // Show results briefly
+            resultsDiv.classList.remove('hidden');
+            
+            // Hide results after 3 seconds (for continuous mining)
+            setTimeout(() => {
+                if (miningState.isMining) {
+                    resultsDiv.classList.add('hidden');
+                }
+            }, 3000);
+        }
+        
+        // Stop mining completely
+        async function completeMining() {
+            if (!miningState.isMining) return;
+            
+            miningState.isMining = false;
+            clearInterval(miningState.miningInterval);
+            
+            const startBtn = document.getElementById('startMiningBtn');
+            const stopBtn = document.getElementById('stopMiningBtn');
+            const progressDiv = document.getElementById('miningProgress');
+            
+            if (startBtn) startBtn.disabled = false;
+            if (stopBtn) stopBtn.disabled = true;
+            if (progressDiv) progressDiv.classList.add('hidden');
+            
+            showMessage('Mining stopped', 'info');
+        }
+        
+        function stopMining() {
+            if (!miningState.isMining) return;
+            
+            miningState.isMining = false;
+            
+            // Clear progress interval
+            if (progressInterval) {
+                clearInterval(progressInterval);
+                progressInterval = null;
+            }
+            
+            // Stop background mining via Web Worker
+            if (miningWorker) {
+                miningWorker.postMessage({ action: 'stopMining' });
+            }
+            
+            showMessage('Background mining stopped', 'info');
+        }
+        
+        function generateFakeHash() {
+            const chars = '0123456789abcdef';
+            let hash = '';
+            for (let i = 0; i < 64; i++) {
+                hash += chars[Math.floor(Math.random() * chars.length)];
+            }
+            return hash;
+        }
+        
+        function addToMiningHistory(block) {
+            const historyDiv = document.getElementById('miningHistory');
+            if (!historyDiv) return;
+            
+            // Clear "no history" message
+            if (historyDiv.querySelector('.text-gray-500')) {
+                historyDiv.innerHTML = '';
+            }
+            
+            const blockNumber = block.blockNumber || '?';
+            const historyItem = document.createElement('div');
+            historyItem.className = 'bg-gray-50 p-3 rounded border-l-4 border-green-500';
+            historyItem.innerHTML = `
+                <div class="flex justify-between items-center">
+                    <div>
+                        <p class="font-medium text-sm">Block #${blockNumber} Mined</p>
+                        <p class="text-xs text-gray-600">${new Date(block.timestamp).toLocaleString()}</p>
+                        <p class="text-xs text-gray-500">Hash: ...${block.hash.slice(-8)}</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-sm font-bold text-green-600">+${block.minerReward} UUBI</p>
+                        <p class="text-xs text-gray-600">${block.hashrate.toLocaleString()} H/s</p>
+                        <p class="text-xs text-purple-600">+${block.ubiReward} to UBI</p>
+                    </div>
+                </div>
+            `;
+            
+            historyDiv.insertBefore(historyItem, historyDiv.firstChild);
+            
+            // Keep only last 15 entries for continuous mining
+            while (historyDiv.children.length > 15) {
+                historyDiv.removeChild(historyDiv.lastChild);
+            }
+        }
+        
+        function updateMiningHistory(history) {
+            const historyDiv = document.getElementById('miningHistory');
+            if (!history || history.length === 0 || !historyDiv) return;
+            
+            historyDiv.innerHTML = '';
+            history.slice(-10).reverse().forEach(entry => {
+                addToMiningHistory({
+                    hash: entry.blockHash || 'unknown',
+                    nonce: entry.nonce || 0,
+                    time: entry.miningTime || 0,
+                    hashrate: entry.miningPower || 0,
+                    difficulty: entry.difficulty || 4,
+                    totalReward: entry.totalCoins || 0,
+                    minerReward: entry.userShare || 0,
+                    ubiReward: entry.ubiShare || 0,
+                    timestamp: entry.timestamp
+                });
+            });
+        }
+    </script>
+</body>
+</html>
+

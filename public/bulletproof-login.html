@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bulletproof Login Button</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            padding: 20px; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            min-height: 100vh;
+        }
+        .container { 
+            max-width: 400px; 
+            margin: 50px auto; 
+            background: white; 
+            padding: 30px; 
+            border-radius: 10px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .form { 
+            display: block; 
+        }
+        .form.hidden { 
+            display: none !important; 
+        }
+        h2 { 
+            text-align: center; 
+            color: #333; 
+            margin-bottom: 20px; 
+        }
+        input { 
+            width: 100%; 
+            padding: 10px; 
+            margin: 10px 0; 
+            border: 1px solid #ddd; 
+            border-radius: 5px; 
+            box-sizing: border-box;
+        }
+        .btn { 
+            width: 100%; 
+            padding: 12px; 
+            background: #28a745; 
+            color: white; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        .btn:hover { 
+            background: #218838; 
+        }
+        .btn.blue { 
+            background: #007bff; 
+        }
+        .btn.blue:hover { 
+            background: #0056b3; 
+        }
+        .link { 
+            text-align: center; 
+            margin-top: 20px; 
+        }
+        .link a { 
+            color: #007bff; 
+            text-decoration: none; 
+            font-weight: bold; 
+        }
+        .link a:hover { 
+            text-decoration: underline; 
+        }
+        .message { 
+            padding: 10px; 
+            margin: 10px 0; 
+            border-radius: 5px; 
+            text-align: center; 
+        }
+        .success { 
+            background: #d4edda; 
+            color: #155724; 
+        }
+        .error { 
+            background: #f8d7da; 
+            color: #721c24; 
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="text-align: center; color: white; margin-bottom: 30px;">UUBI</h1>
+        
+        <div id="message"></div>
+        
+        <!-- Registration Form -->
+        <div id="registerForm" class="form">
+            <h2>Create Account</h2>
+            <input type="email" placeholder="Email" id="regEmail">
+            <input type="password" placeholder="Password" id="regPassword">
+            <input type="password" placeholder="Confirm Password" id="regConfirmPassword">
+            <button class="btn" onclick="handleRegister()">Create Account</button>
+            <div class="link">
+                Already have an account? 
+                <a href="#" onclick="showLogin(); return false;">Login here</a>
+            </div>
+        </div>
+        
+        <!-- Login Form -->
+        <div id="loginForm" class="form hidden">
+            <h2>Login</h2>
+            <input type="email" placeholder="Email" id="loginEmail">
+            <input type="password" placeholder="Password" id="loginPassword">
+            <button class="btn blue" onclick="handleLogin()">Login</button>
+            <div class="link">
+                Don't have an account? 
+                <a href="#" onclick="showRegister(); return false;">Create one here</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showMessage(text, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.innerHTML = '<div class="message ' + type + '">' + text + '</div>';
+            setTimeout(() => {
+                messageDiv.innerHTML = '';
+            }, 3000);
+        }
+        
+        function showLogin() {
+            console.log('Showing login form');
+            document.getElementById('registerForm').classList.add('hidden');
+            document.getElementById('loginForm').classList.remove('hidden');
+            showMessage('Switched to login form', 'success');
+        }
+        
+        function showRegister() {
+            console.log('Showing register form');
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('registerForm').classList.remove('hidden');
+            showMessage('Switched to register form', 'success');
+        }
+        
+        function handleRegister() {
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            const confirmPassword = document.getElementById('regConfirmPassword').value;
+            
+            if (!email || !password) {
+                showMessage('Email and password are required', 'error');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showMessage('Passwords do not match', 'error');
+                return;
+            }
+            
+            showMessage('Registration successful!', 'success');
+        }
+        
+        function handleLogin() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!email || !password) {
+                showMessage('Email and password are required', 'error');
+                return;
+            }
+            
+            showMessage('Login successful!', 'success');
+        }
+        
+        // Initialize
+        console.log('Page loaded');
+        showMessage('Page loaded - click "Login here" to test', 'success');
+    </script>
+</body>
+</html>

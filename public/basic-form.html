@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Basic File Upload Form</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; max-width: 800px; margin: 0 auto; }
+        .form-group { margin: 20px 0; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input[type="file"] { width: 100%; padding: 10px; border: 1px solid #ccc; }
+        button { background: #007bff; color: white; padding: 10px 20px; border: none; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .preview { margin-top: 10px; }
+        .preview img, .preview video { max-width: 300px; max-height: 200px; border: 1px solid #ccc; }
+    </style>
+</head>
+<body>
+    <h1>Basic File Upload Test</h1>
+    <p>This form uses standard HTML without any JavaScript. Just select files and they should show in the preview.</p>
+    
+    <form>
+        <div class="form-group">
+            <label for="biometric">Biometric Image:</label>
+            <input type="file" id="biometric" name="biometric" accept="image/*">
+        </div>
+        
+        <div class="form-group">
+            <label for="video">Liveness Video:</label>
+            <input type="file" id="video" name="video" accept="video/*">
+        </div>
+        
+        <div class="form-group">
+            <label for="document">Document Image:</label>
+            <input type="file" id="document" name="document" accept="image/*">
+        </div>
+        
+        <button type="button" onclick="testUpload()">Test Upload</button>
+    </form>
+    
+    <div id="results" style="margin-top: 20px; padding: 10px; background: #f0f0f0;"></div>
+
+    <script>
+        function testUpload() {
+            const biometric = document.getElementById('biometric').files[0];
+            const video = document.getElementById('video').files[0];
+            const document = document.getElementById('document').files[0];
+            
+            let results = '<h3>Files Selected:</h3>';
+            
+            if (biometric) {
+                results += '<p>✅ Biometric: ' + biometric.name + ' (' + (biometric.size/1024).toFixed(1) + ' KB)</p>';
+            } else {
+                results += '<p>❌ No biometric file selected</p>';
+            }
+            
+            if (video) {
+                results += '<p>✅ Video: ' + video.name + ' (' + (video.size/1024/1024).toFixed(1) + ' MB)</p>';
+            } else {
+                results += '<p>❌ No video file selected</p>';
+            }
+            
+            if (document) {
+                results += '<p>✅ Document: ' + document.name + ' (' + (document.size/1024).toFixed(1) + ' KB)</p>';
+            } else {
+                results += '<p>❌ No document file selected</p>';
+            }
+            
+            document.getElementById('results').innerHTML = results;
+        }
+    </script>
+</body>
+</html>

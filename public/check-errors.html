@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check JavaScript Errors</title>
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        button { padding: 10px 20px; margin: 10px; font-size: 16px; }
+        .success { color: green; }
+        .error { color: red; }
+        .info { color: blue; }
+        #console { background: #f0f0f0; padding: 10px; margin: 10px 0; font-family: monospace; white-space: pre-wrap; }
+    </style>
+</head>
+<body>
+    <h1>Check JavaScript Errors</h1>
+    
+    <div>
+        <button id="connectWallet">Connect New Wallet</button>
+        <button id="testBtn">Test Button</button>
+        <button id="checkBtn">Check Errors</button>
+    </div>
+    
+    <div id="walletAddress">Not connected</div>
+    <div id="network">Unknown</div>
+    <div id="messages"></div>
+    <div id="console"></div>
+
+    <script>
+        // Override console.log to capture output
+        const originalLog = console.log;
+        const originalError = console.error;
+        const consoleDiv = document.getElementById('console');
+        
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            consoleDiv.textContent += 'LOG: ' + args.join(' ') + '\n';
+        };
+        
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            consoleDiv.textContent += 'ERROR: ' + args.join(' ') + '\n';
+        };
+        
+        // Test if JavaScript is working
+        console.log('🚀 JavaScript is working!');
+        
+        // Simple test function
+        function testFunction() {
+            console.log('✅ Test function called');
+            showMessage('Test function works!', 'success');
+        }
+        
+        // Simple wallet connection function
+        async function connectWallet() {
+            console.log('🔗 Connect wallet function called');
+            showMessage('Connect wallet function called!', 'info');
+            
+            const button = document.getElementById('connectWallet');
+            if (!button) {
+                console.error('❌ Connect wallet button not found');
+                return;
+            }
+            
+            try {
+                button.disabled = true;
+                button.innerHTML = 'Connecting...';
+                
+                if (typeof window.ethereum === 'undefined') {
+                    throw new Error('No Web3 wallet found. Please install MetaMask.');
+                }
+                
+                const accounts = await window.ethereum.request({ 
+                    method: 'eth_requestAccounts' 
+                });
+                
+                if (!accounts || accounts.length === 0) {
+                    throw new Error('No accounts found. Please unlock your wallet.');
+                }
+                
+                const walletAddress = accounts[0];
+                console.log('✅ Wallet connected:', walletAddress);
+                
+                // Update UI
+                const walletAddressElement = document.getElementById('walletAddress');
+                const networkElement = document.getElementById('network');
+                
+                if (walletAddressElement) {
+                    walletAddressElement.textContent = walletAddress;
+                    walletAddressElement.style.color = '#28a745';
+                    walletAddressElement.style.fontWeight = 'bold';
+                }
+                
+                if (networkElement) {
+                    networkElement.textContent = 'Connected';
+                    networkElement.style.color = '#28a745';
+                }
+                
+                button.innerHTML = 'Connected';
+                button.style.backgroundColor = '#28a745';
+                button.style.color = 'white';
+                
+                showMessage('✅ Wallet connected successfully!', 'success');
+                
+            } catch (error) {
+                console.error('❌ Wallet connection failed:', error);
+                button.disabled = false;
+                button.innerHTML = 'Connect New Wallet';
+                button.style.backgroundColor = '';
+                button.style.color = '';
+                showMessage('❌ Failed to connect wallet: ' + error.message, 'error');
+            }
+        }
+        
+        function checkErrors() {
+            console.log('🔍 Checking for JavaScript errors...');
+            
+            // Check if functions are defined
+            console.log('connectWallet function:', typeof connectWallet);
+            console.log('testFunction function:', typeof testFunction);
+            console.log('showMessage function:', typeof showMessage);
+            
+            // Check if elements exist
+            const connectBtn = document.getElementById('connectWallet');
+            const testBtn = document.getElementById('testBtn');
+            const walletAddress = document.getElementById('walletAddress');
+            const network = document.getElementById('network');
+            
+            console.log('connectWallet button:', connectBtn ? 'Found' : 'Not found');
+            console.log('testBtn button:', testBtn ? 'Found' : 'Not found');
+            console.log('walletAddress element:', walletAddress ? 'Found' : 'Not found');
+            console.log('network element:', network ? 'Found' : 'Not found');
+            
+            // Check Web3
+            console.log('window.ethereum:', typeof window.ethereum);
+            console.log('Web3:', typeof Web3);
+            
+            showMessage('Error check completed!', 'info');
+        }
+        
+        function showMessage(message, type) {
+            const messagesDiv = document.getElementById('messages');
+            const messageEl = document.createElement('div');
+            messageEl.textContent = message;
+            messageEl.className = type;
+            messagesDiv.appendChild(messageEl);
+            
+            setTimeout(() => {
+                if (messageEl.parentNode) {
+                    messageEl.parentNode.removeChild(messageEl);
+                }
+            }, 5000);
+        }
+        
+        // Setup when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 DOM loaded, setting up event listeners...');
+            
+            const connectBtn = document.getElementById('connectWallet');
+            const testBtn = document.getElementById('testBtn');
+            const checkBtn = document.getElementById('checkBtn');
+            
+            if (connectBtn) {
+                connectBtn.onclick = function(e) {
+                    e.preventDefault();
+                    console.log('🔗 Connect wallet button clicked');
+                    connectWallet();
+                };
+                console.log('✅ Connect wallet button listener added');
+            } else {
+                console.error('❌ Connect wallet button not found');
+            }
+            
+            if (testBtn) {
+                testBtn.onclick = function(e) {
+                    e.preventDefault();
+                    console.log('🔘 Test button clicked');
+                    testFunction();
+                };
+                console.log('✅ Test button listener added');
+            }
+            
+            if (checkBtn) {
+                checkBtn.onclick = function(e) {
+                    e.preventDefault();
+                    console.log('🔍 Check button clicked');
+                    checkErrors();
+                };
+                console.log('✅ Check button listener added');
+            }
+            
+            console.log('✅ Setup complete');
+        });
+        
+        // Catch any unhandled errors
+        window.addEventListener('error', function(e) {
+            console.error('Unhandled error:', e.error);
+            showMessage('JavaScript error: ' + e.error.message, 'error');
+        });
+        
+        // Catch unhandled promise rejections
+        window.addEventListener('unhandledrejection', function(e) {
+            console.error('Unhandled promise rejection:', e.reason);
+            showMessage('Promise error: ' + e.reason, 'error');
+        });
+    </script>
+</body>
+</html>

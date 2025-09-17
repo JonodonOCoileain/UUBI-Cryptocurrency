@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wallet Connection Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        button { padding: 10px 20px; margin: 10px; font-size: 16px; }
+        .success { color: green; }
+        .error { color: red; }
+        .info { color: blue; }
+    </style>
+</head>
+<body>
+    <h1>Wallet Connection Test</h1>
+    
+    <div>
+        <button id="connectWallet">Connect New Wallet</button>
+        <button id="disconnectWallet">Disconnect Wallet</button>
+    </div>
+    
+    <div id="walletInfo">
+        <p>Wallet Address: <span id="walletAddress">Not connected</span></p>
+        <p>Network: <span id="network">Unknown</span></p>
+    </div>
+    
+    <div id="messages"></div>
+
+    <script>
+        // Clean wallet connection functions
+        async function connectWallet() {
+            console.log('🔗 Starting wallet connection...');
+            
+            const button = document.getElementById('connectWallet');
+            if (!button) {
+                console.error('❌ Connect wallet button not found');
+                return;
+            }
+            
+            try {
+                // Show loading state
+                button.disabled = true;
+                button.innerHTML = 'Connecting...';
+                
+                // Check if Web3 is available
+                if (typeof window.ethereum === 'undefined') {
+                    throw new Error('MetaMask or other Web3 wallet not detected. Please install MetaMask.');
+                }
+                
+                // Request account access
+                const accounts = await window.ethereum.request({ 
+                    method: 'eth_requestAccounts' 
+                });
+                
+                if (!accounts || accounts.length === 0) {
+                    throw new Error('No accounts found. Please unlock your wallet.');
+                }
+                
+                const walletAddress = accounts[0];
+                console.log('✅ Wallet connected:', walletAddress);
+                
+                // Update UI
+                updateWalletUI(walletAddress, 'connected');
+                showMessage('✅ Wallet connected successfully!', 'success');
+                
+            } catch (error) {
+                console.error('❌ Wallet connection failed:', error);
+                resetWalletButton();
+                showMessage('❌ Failed to connect wallet: ' + error.message, 'error');
+            }
+        }
+        
+        function updateWalletUI(address, status) {
+            const walletAddressElement = document.getElementById('walletAddress');
+            const networkElement = document.getElementById('network');
+            const button = document.getElementById('connectWallet');
+            
+            if (walletAddressElement) {
+                walletAddressElement.textContent = address;
+                walletAddressElement.style.color = '#28a745';
+                walletAddressElement.style.fontWeight = 'bold';
+            }
+            
+            if (networkElement) {
+                networkElement.textContent = 'Connected';
+                networkElement.style.color = '#28a745';
+            }
+            
+            if (button) {
+                if (status === 'connected') {
+                    button.innerHTML = 'Connected';
+                    button.style.backgroundColor = '#28a745';
+                    button.style.color = 'white';
+                }
+                button.disabled = true;
+            }
+        }
+        
+        function resetWalletButton() {
+            const button = document.getElementById('connectWallet');
+            if (button) {
+                button.disabled = false;
+                button.innerHTML = 'Connect New Wallet';
+                button.style.backgroundColor = '';
+                button.style.color = '';
+            }
+        }
+        
+        function disconnectWallet() {
+            console.log('🔌 Disconnecting wallet...');
+            
+            const walletAddressElement = document.getElementById('walletAddress');
+            const networkElement = document.getElementById('network');
+            
+            if (walletAddressElement) {
+                walletAddressElement.textContent = 'Not connected';
+                walletAddressElement.style.color = '#6c757d';
+                walletAddressElement.style.fontWeight = 'normal';
+            }
+            
+            if (networkElement) {
+                networkElement.textContent = 'Unknown';
+                networkElement.style.color = '#6c757d';
+            }
+            
+            resetWalletButton();
+            showMessage('Wallet disconnected', 'info');
+        }
+        
+        function showMessage(message, type) {
+            const messagesDiv = document.getElementById('messages');
+            const messageEl = document.createElement('div');
+            messageEl.textContent = message;
+            messageEl.className = type;
+            messagesDiv.appendChild(messageEl);
+            
+            // Remove message after 5 seconds
+            setTimeout(() => {
+                if (messageEl.parentNode) {
+                    messageEl.parentNode.removeChild(messageEl);
+                }
+            }, 5000);
+        }
+        
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Wallet test page loaded');
+            
+            const connectBtn = document.getElementById('connectWallet');
+            const disconnectBtn = document.getElementById('disconnectWallet');
+            
+            if (connectBtn) {
+                connectBtn.onclick = function(e) {
+                    e.preventDefault();
+                    console.log('🔗 Connect wallet button clicked');
+                    connectWallet();
+                };
+                console.log('✅ Connect wallet button listener added');
+            }
+            
+            if (disconnectBtn) {
+                disconnectBtn.onclick = function(e) {
+                    e.preventDefault();
+                    console.log('🔌 Disconnect wallet button clicked');
+                    disconnectWallet();
+                };
+                console.log('✅ Disconnect wallet button listener added');
+            }
+        });
+    </script>
+</body>
+</html>

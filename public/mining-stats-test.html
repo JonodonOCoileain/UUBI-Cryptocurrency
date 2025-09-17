@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UUBI Mining Stats Test</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-white mb-2">Mining Stats Test</h1>
+            <p class="text-white opacity-90">Testing mining statistics display</p>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-lg p-8 max-w-4xl mx-auto">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">Mining Statistics</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="bg-gray-50 rounded-lg p-4 text-center">
+                    <div class="text-2xl font-bold text-green-600" id="testBalance">0 UUBI</div>
+                    <div class="text-sm text-gray-600">Your Balance</div>
+                </div>
+                <div class="bg-gray-50 rounded-lg p-4 text-center">
+                    <div class="text-2xl font-bold text-blue-600" id="testUbiPool">0 UUBI</div>
+                    <div class="text-sm text-gray-600">UBI Pool</div>
+                </div>
+                <div class="bg-gray-50 rounded-lg p-4 text-center">
+                    <div class="text-2xl font-bold text-purple-600" id="testHashrate">0 H/s</div>
+                    <div class="text-sm text-gray-600">Hashrate</div>
+                </div>
+                <div class="bg-gray-50 rounded-lg p-4 text-center">
+                    <div class="text-2xl font-bold text-orange-600" id="testDifficulty">4</div>
+                    <div class="text-sm text-gray-600">Difficulty</div>
+                </div>
+            </div>
+            
+            <div class="space-y-4">
+                <button id="testLoadData" class="bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition">
+                    Load Server Data
+                </button>
+                <button id="testSimulateMining" class="bg-green-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-green-700 transition">
+                    Simulate Mining
+                </button>
+                <button id="testReset" class="bg-red-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-red-700 transition">
+                    Reset
+                </button>
+            </div>
+            
+            <div class="mt-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Debug Info</h3>
+                <div id="debugInfo" class="bg-gray-100 p-4 rounded text-sm font-mono">
+                    Click "Load Server Data" to see debug information
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let testMiningState = {
+            userBalance: 0,
+            ubiPool: 0,
+            totalHashes: 0,
+            blocksMined: 0,
+            miningStartTime: null
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('testLoadData').addEventListener('click', loadTestData);
+            document.getElementById('testSimulateMining').addEventListener('click', simulateTestMining);
+            document.getElementById('testReset').addEventListener('click', resetTest);
+        });
+
+        async function loadTestData() {
+            try {
+                const response = await fetch('/api/mining/data');
+                const data = await response.json();
+                
+                if (data.success) {
+                    testMiningState.ubiPool = data.data.ubiPool || 0;
+                    testMiningState.userBalance = 0;
+                    testMiningState.totalHashes = 0;
+                    testMiningState.blocksMined = 0;
+                    
+                    updateTestStats();
+                    
+                    document.getElementById('debugInfo').innerHTML = `
+                        <strong>Server Data Loaded:</strong><br>
+                        UBI Pool: ${data.data.ubiPool}<br>
+                        Total Mined: ${data.data.totalMined}<br>
+                        Mining History: ${data.data.miningHistory.length} entries
+                    `;
+                } else {
+                    document.getElementById('debugInfo').innerHTML = 'Failed to load server data';
+                }
+            } catch (error) {
+                document.getElementById('debugInfo').innerHTML = 'Error: ' + error.message;
+            }
+        }
+
+        function simulateTestMining() {
+            testMiningState.miningStartTime = Date.now();
+            testMiningState.totalHashes = 0;
+            testMiningState.blocksMined = 0;
+            
+            const interval = setInterval(() => {
+                testMiningState.totalHashes += 1000 + Math.random() * 5000;
+                testMiningState.userBalance += 1; // Simulate earning UUBI
+                testMiningState.ubiPool += 2; // Simulate UBI pool growth
+                
+                updateTestStats();
+                
+                if (testMiningState.totalHashes > 100000) {
+                    clearInterval(interval);
+                    testMiningState.blocksMined++;
+                    document.getElementById('debugInfo').innerHTML = `
+                        <strong>Simulation Complete:</strong><br>
+                        Blocks Mined: ${testMiningState.blocksMined}<br>
+                        Total Hashes: ${testMiningState.totalHashes.toLocaleString()}<br>
+                        User Balance: ${testMiningState.userBalance} UUBI<br>
+                        UBI Pool: ${testMiningState.ubiPool} UUBI
+                    `;
+                }
+            }, 100);
+        }
+
+        function updateTestStats() {
+            document.getElementById('testBalance').textContent = testMiningState.userBalance + ' UUBI';
+            document.getElementById('testUbiPool').textContent = testMiningState.ubiPool + ' UUBI';
+            
+            let hashrate = 0;
+            if (testMiningState.miningStartTime && testMiningState.totalHashes > 0) {
+                const elapsed = (Date.now() - testMiningState.miningStartTime) / 1000;
+                hashrate = Math.floor(testMiningState.totalHashes / elapsed);
+            }
+            
+            document.getElementById('testHashrate').textContent = hashrate.toLocaleString() + ' H/s';
+            document.getElementById('testDifficulty').textContent = '4';
+        }
+
+        function resetTest() {
+            testMiningState = {
+                userBalance: 0,
+                ubiPool: 0,
+                totalHashes: 0,
+                blocksMined: 0,
+                miningStartTime: null
+            };
+            
+            updateTestStats();
+            document.getElementById('debugInfo').innerHTML = 'Reset complete';
+        }
+    </script>
+</body>
+</html>
