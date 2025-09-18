@@ -1,29 +1,28 @@
-# Use Node.js 18 LTS
-FROM node:18-alpine
+# Use Node.js 18 LTS with full Ubuntu instead of Alpine for better compatibility
+FROM node:18-slim
 
 # Set working directory
 WORKDIR /app
 
-# Install system dependencies
-RUN apk add --no-cache \
+# Install system dependencies for Ubuntu
+RUN apt-get update && apt-get install -y \
     python3 \
     make \
     g++ \
-    cairo-dev \
-    jpeg-dev \
-    pango-dev \
-    musl-dev \
-    giflib-dev \
-    pixman-dev \
-    pangomm-dev \
-    libjpeg-turbo-dev \
-    freetype-dev
+    libcairo2-dev \
+    libjpeg-dev \
+    libpango1.0-dev \
+    libgif-dev \
+    build-essential \
+    libjpeg-turbo8-dev \
+    libfreetype6-dev \
+    && rm -rf /var/lib/apt/lists/*
 
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies (skip optional dependencies for Linux)
-RUN npm ci --omit=dev --ignore-scripts
+# Install dependencies with rebuild
+RUN npm ci --omit=dev && npm rebuild
 
 # Copy source code
 COPY . .
