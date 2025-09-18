@@ -2305,14 +2305,17 @@ app.post('/api/mining/stop', (req, res) => {
             const { minerAddress, block, rewards, timestamp } = req.body;
             
             console.log(`🎉 Real block received from ${minerAddress}`);
-            console.log(`⏱️  Mining time: ${block.miningTime}s`);
-            console.log(`⚡ Hashrate: ${block.hashrate.toLocaleString()} H/s`);
-            console.log(`🏆 Hash: ${block.hash}`);
+            console.log(`📦 Block data:`, JSON.stringify(block, null, 2));
+            console.log(`⏱️  Mining time: ${block.miningTime || block.time || 'N/A'}s`);
+            console.log(`⚡ Hashrate: ${block.hashrate ? block.hashrate.toLocaleString() : 'N/A'} H/s`);
+            console.log(`🏆 Hash: ${block.hash || 'N/A'}`);
             console.log(`💰 Rewards: ${rewards.miner} UUBI to miner, ${rewards.ubi} UUBI to UBI`);
             
             // Update user balance
             const currentBalance = miningData.userBalances.get(minerAddress) || 0;
-            miningData.userBalances.set(minerAddress, currentBalance + rewards.miner);
+            const newBalance = currentBalance + rewards.miner;
+            miningData.userBalances.set(minerAddress, newBalance);
+            console.log(`💰 Updated balance for ${minerAddress}: ${currentBalance} -> ${newBalance} UUBI`);
             
             // Update mining data
             miningData.ubiPool += rewards.ubi;
