@@ -2061,6 +2061,11 @@
         function initializeMining() {
             console.log('⛏️  Initializing mining functionality...');
             
+            // Check if mining section exists
+            const miningSection = document.getElementById('miningSection');
+            console.log('📍 Mining section element:', miningSection);
+            console.log('📍 Mining section visible:', miningSection ? !miningSection.classList.contains('hidden') : 'not found');
+            
             // Initialize Web Worker for background mining
             initializeMiningWorker();
             
@@ -2107,12 +2112,16 @@
         }
         
         function initializeMiningWorker() {
+            console.log('🔧 Starting mining worker initialization...');
             try {
                 // Create Web Worker for background mining
+                console.log('📁 Creating worker with path: /mining-worker.js');
                 miningWorker = new Worker('/mining-worker.js');
+                console.log('✅ Worker created successfully:', miningWorker);
                 
                 // Listen for messages from worker
                 miningWorker.onmessage = function(e) {
+                    console.log('📨 Message from mining worker:', e.data);
                     handleWorkerMessage(e.data);
                 };
                 
@@ -2122,9 +2131,10 @@
                     showMessage('Mining worker error: ' + error.message, 'error');
                 };
                 
-                console.log('✅ Mining worker initialized');
+                console.log('✅ Mining worker initialized successfully');
             } catch (error) {
                 console.error('❌ Failed to initialize mining worker:', error);
+                console.error('❌ Error details:', error.message, error.stack);
                 showMessage('Failed to initialize background mining', 'error');
             }
         }
