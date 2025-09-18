@@ -215,6 +215,9 @@ function completeMiningBlock(blockNumber, blockHashes) {
 
 async function notifyServerBlockMined(blockNumber, totalReward, minerReward, ubiReward) {
     try {
+        const blockMiningTime = (Date.now() - miningState.miningStartTime) / 1000;
+        const hashrate = Math.floor(miningState.currentHashes / blockMiningTime);
+        
         const response = await fetch('/api/mining/real-block', {
             method: 'POST',
             headers: {
@@ -222,10 +225,18 @@ async function notifyServerBlockMined(blockNumber, totalReward, minerReward, ubi
             },
             body: JSON.stringify({
                 minerAddress: miningState.minerAddress,
-                blockNumber: blockNumber,
-                totalReward: totalReward,
-                minerReward: minerReward,
-                ubiReward: ubiReward
+                block: {
+                    miningTime: blockMiningTime,
+                    hashrate: hashrate,
+                    hash: generateFakeHash(),
+                    blockNumber: blockNumber
+                },
+                rewards: {
+                    miner: minerReward,
+                    ubi: ubiReward,
+                    total: totalReward
+                },
+                timestamp: new Date().toISOString()
             })
         });
         

@@ -2302,13 +2302,29 @@ app.post('/api/mining/stop', (req, res) => {
     // Report real mined block
     app.post('/api/mining/real-block', (req, res) => {
         try {
+            console.log('📥 Full request body:', JSON.stringify(req.body, null, 2));
+            
             const { minerAddress, block, rewards, timestamp } = req.body;
             
             console.log(`🎉 Real block received from ${minerAddress}`);
+            
+            // Check if block data exists
+            if (!block) {
+                console.error('❌ Block data is missing from request');
+                return res.status(400).json({ success: false, error: 'Block data is missing' });
+            }
+            
             console.log(`📦 Block data:`, JSON.stringify(block, null, 2));
             console.log(`⏱️  Mining time: ${block.miningTime || block.time || 'N/A'}s`);
             console.log(`⚡ Hashrate: ${block.hashrate ? block.hashrate.toLocaleString() : 'N/A'} H/s`);
             console.log(`🏆 Hash: ${block.hash || 'N/A'}`);
+            
+            // Check if rewards exist
+            if (!rewards) {
+                console.error('❌ Rewards data is missing from request');
+                return res.status(400).json({ success: false, error: 'Rewards data is missing' });
+            }
+            
             console.log(`💰 Rewards: ${rewards.miner} UUBI to miner, ${rewards.ubi} UUBI to UBI`);
             
             // Update user balance
