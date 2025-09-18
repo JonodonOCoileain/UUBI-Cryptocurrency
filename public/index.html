@@ -2072,8 +2072,14 @@
             const stopMiningBtn = document.getElementById('stopMiningBtn');
             
             if (startMiningBtn) {
-                startMiningBtn.addEventListener('click', startMining);
+                startMiningBtn.addEventListener('click', function(e) {
+                    console.log('🎯 Start mining button clicked - event triggered!');
+                    e.preventDefault();
+                    startMining();
+                });
                 console.log('✅ Start mining button listener added');
+            } else {
+                console.error('❌ Start mining button not found!');
             }
             
             if (stopMiningBtn) {
@@ -2319,8 +2325,16 @@
             const miningSection = document.getElementById('miningSection');
             const logoutBtn = document.getElementById('logoutBtn');
             
+            console.log('🔍 Checking login status...');
+            console.log('📍 Wallet address element:', walletAddress);
+            console.log('📍 Mining section element:', miningSection);
+            
             if (walletAddress && miningSection) {
-                const isLoggedIn = walletAddress.textContent && walletAddress.textContent !== 'Not connected';
+                const walletText = walletAddress.textContent;
+                const isLoggedIn = walletText && walletText !== 'Not connected';
+                
+                console.log('💰 Wallet address text:', walletText);
+                console.log('🔐 Is logged in:', isLoggedIn);
                 
                 if (isLoggedIn) {
                     miningSection.classList.remove('hidden');
@@ -2331,6 +2345,8 @@
                     if (logoutBtn) logoutBtn.classList.add('hidden');
                     console.log('ℹ️  User not logged in - hiding mining section and logout button');
                 }
+            } else {
+                console.error('❌ Missing elements: walletAddress or miningSection');
             }
         }
         
@@ -2535,11 +2551,18 @@
         }
         
         async function startMining() {
-            if (miningState.isMining) return;
+            console.log('🚀 Start mining button clicked!');
+            console.log('📊 Current mining state:', miningState);
+            
+            if (miningState.isMining) {
+                console.log('⚠️ Already mining, ignoring request');
+                return;
+            }
             
             const minerAddressInput = document.getElementById('minerAddressInput');
             if (minerAddressInput) {
                 miningState.minerAddress = minerAddressInput.value || 'miner-' + Date.now();
+                console.log('👤 Miner address set to:', miningState.minerAddress);
             }
             
             try {
