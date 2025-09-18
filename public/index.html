@@ -2099,7 +2099,13 @@
             }
             
             // Initialize mining functionality
-            initializeMining();
+            console.log('🎯 About to call initializeMining()...');
+            try {
+                initializeMining();
+                console.log('✅ initializeMining() called successfully');
+            } catch (error) {
+                console.error('❌ Error calling initializeMining():', error);
+            }
             
             // Check if user is logged in and show mining section
             checkLoginStatus();
