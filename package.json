@@ -12,7 +12,8 @@
     "dev": "nodemon server.js",
     "test": "jest",
     "deploy": "truffle migrate --network mainnet",
-    "compile": "truffle compile"
+    "compile": "truffle compile",
+    "postinstall": "npm rebuild sharp || true"
   },
   "dependencies": {
     "@openzeppelin/contracts": "^4.9.3",
