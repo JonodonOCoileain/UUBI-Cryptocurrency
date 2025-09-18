@@ -2081,6 +2081,9 @@
                 console.log('✅ Stop mining button listener added');
             }
             
+            // Initialize mining functionality
+            initializeMining();
+            
             // Check if user is logged in and show mining section
             checkLoginStatus();
             
@@ -2364,7 +2367,7 @@
                     const ubiPoolEl = document.getElementById('miningUbiPool');
                     const hashrateEl = document.getElementById('miningHashrate');
                     const difficultyEl = document.getElementById('miningDifficulty');
-                    const blocksEl = document.getElementById('miningBlocksMined');
+                    const blocksEl = document.getElementById('blocksMinedCount');
                     const startBtn = document.getElementById('startMiningBtn');
                     const stopBtn = document.getElementById('stopMiningBtn');
                     
