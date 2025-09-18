@@ -2098,14 +2098,8 @@
                 console.log('✅ Stop mining button listener added');
             }
             
-            // Initialize mining functionality
-            console.log('🎯 About to call initializeMining()...');
-            try {
-                initializeMining();
-                console.log('✅ initializeMining() called successfully');
-            } catch (error) {
-                console.error('❌ Error calling initializeMining():', error);
-            }
+            // Mining initialization will happen when Start Mining button is clicked
+            console.log('✅ Mining setup complete - initialization will happen when Start Mining is clicked');
             
             // Check if user is logged in and show mining section
             checkLoginStatus();
@@ -2585,6 +2579,19 @@
             if (minerAddressInput) {
                 miningState.minerAddress = minerAddressInput.value || 'miner-' + Date.now();
                 console.log('👤 Miner address set to:', miningState.minerAddress);
+            }
+            
+            // Initialize mining worker if not already created
+            if (!miningWorker) {
+                console.log('🔧 Initializing mining worker for first time...');
+                try {
+                    initializeMiningWorker();
+                    console.log('✅ Mining worker initialized successfully');
+                } catch (error) {
+                    console.error('❌ Failed to initialize mining worker:', error);
+                    showMessage('Failed to initialize mining worker', 'error');
+                    return;
+                }
             }
             
             try {
