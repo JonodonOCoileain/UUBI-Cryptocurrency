@@ -587,7 +587,7 @@
                         </div>
                         
                         <div class="flex space-x-4">
-                            <button id="startMiningBtn" class="bg-green-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-green-700 transition">
+                            <button id="startMiningBtn" onclick="console.log('🔥 ONCLICK: Start Mining button clicked!'); startMining();" class="bg-green-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-green-700 transition">
                                 <i class="fas fa-play mr-2"></i>
                                 Start Mining
                             </button>
@@ -2085,10 +2085,14 @@
             if (startMiningBtn) {
                 startMiningBtn.addEventListener('click', function(e) {
                     console.log('🎯 Start mining button clicked - event triggered!');
+                    console.log('🔍 Button element:', startMiningBtn);
+                    console.log('🔍 Mining section visible:', document.getElementById('miningSection')?.classList.contains('hidden') ? 'HIDDEN' : 'VISIBLE');
                     e.preventDefault();
                     startMining();
                 });
                 console.log('✅ Start mining button listener added');
+                console.log('🔍 Button found:', startMiningBtn);
+                console.log('🔍 Button text:', startMiningBtn.textContent);
             } else {
                 console.error('❌ Start mining button not found!');
             }
