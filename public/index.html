@@ -769,13 +769,19 @@
 
     <!-- Clean Upload JavaScript -->
     <script>
+        // Test JavaScript execution immediately
+        console.log('🔥 JavaScript is loading...');
+        console.log('📅 Current time:', new Date().toISOString());
         
-        
-        
+        // Test immediate execution
+        setTimeout(function() {
+            console.log('⏰ Timeout test - JavaScript is definitely running!');
+        }, 1000);
         
         // Initialize when page loads
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🚀 Initializing UUBI App...');
+            console.log('✅ DOM Content Loaded - JavaScript is running!');
             
             
             // Prevent form submission
